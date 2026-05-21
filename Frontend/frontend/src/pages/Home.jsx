@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
+
 import axios from "axios";
+
 import Navbar from "../components/Navbar";
+
 import Hero from "../components/Hero";
-import Categories from "../components/Categories";
+
 import TrendingBanner from "../components/TrendingBanner";
+
 import FilterBar from "../components/FilterBar";
+
 import ProductCard from "../components/ProductCard";
+
 import Footer from "../components/Footer";
+
 import CategorySection from "../components/CategorySection";
 
 export default function Home() {
@@ -30,7 +37,9 @@ export default function Home() {
     useState("");
 
   useEffect(() => {
+
     fetchProducts();
+
   }, []);
 
   const fetchProducts =
@@ -56,17 +65,31 @@ export default function Home() {
     products.filter((product) => {
 
       const matchesSearch =
+
         product.title
-          .toLowerCase()
+          ?.toLowerCase()
+          .includes(
+            search.toLowerCase()
+          )
+
+        ||
+
+        product.category
+          ?.toLowerCase()
           .includes(
             search.toLowerCase()
           );
 
       const matchesCategory =
+
         category === ""
-        || product.category === category;
+
+        ||
+
+        product.category === category;
 
       const matchesCollege =
+
         product.college
           ?.toLowerCase()
           .includes(
@@ -74,14 +97,20 @@ export default function Home() {
           );
 
       const matchesCondition =
+
         condition === ""
-        || product.condition === condition;
+
+        ||
+
+        product.condition === condition;
 
       return (
+
         matchesSearch &&
         matchesCategory &&
         matchesCollege &&
         matchesCondition
+
       );
     });
 
@@ -109,8 +138,11 @@ export default function Home() {
 
       <Navbar />
 
-      <Hero />
-      
+      <Hero
+        search={search}
+        setSearch={setSearch}
+      />
+
       <CategorySection
         setCategory={setCategory}
       />
@@ -138,26 +170,64 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-6 py-16">
 
-        <h2 className="text-4xl font-bold text-gray-800 mb-10">
-          Recently Added
-        </h2>
+        <div className="flex items-center justify-between mb-10">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-4xl font-bold text-gray-800">
 
-          {
-            filteredProducts.map(
-              (product) => (
+            Recently Added
 
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                />
+          </h2>
 
-              )
-            )
-          }
+          <p className="text-gray-500 text-lg">
+
+            {
+              filteredProducts.length
+            } Products
+
+          </p>
 
         </div>
+
+        {
+          filteredProducts.length === 0 ? (
+
+            <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
+
+              <h2 className="text-3xl font-bold text-gray-700">
+
+                No Products Found
+
+              </h2>
+
+              <p className="text-gray-500 mt-4 text-lg">
+
+                Try searching with different keywords.
+
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              {
+                filteredProducts.map(
+                  (product) => (
+
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                    />
+
+                  )
+                )
+              }
+
+            </div>
+
+          )
+        }
 
       </section>
 
