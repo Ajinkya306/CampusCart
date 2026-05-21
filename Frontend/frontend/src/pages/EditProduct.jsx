@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
+import toast from "react-hot-toast";
 
 export default function EditProduct() {
 
@@ -70,7 +71,7 @@ export default function EditProduct() {
           formData
         );
 
-        alert(
+        toast.success(
           "Product Updated"
         );
 

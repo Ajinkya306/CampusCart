@@ -16,10 +16,15 @@ import Footer from "../components/Footer";
 
 import CategorySection from "../components/CategorySection";
 
+import SkeletonCard from "../components/SkeletonCard";
+
 export default function Home() {
 
   const [products, setProducts] =
     useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
 
   const [search, setSearch] =
     useState("");
@@ -54,9 +59,13 @@ export default function Home() {
 
         setProducts(response.data);
 
+        setLoading(false);
+
       } catch (error) {
 
         console.log(error);
+
+        setLoading(false);
 
       }
     };
@@ -189,7 +198,25 @@ export default function Home() {
         </div>
 
         {
-          filteredProducts.length === 0 ? (
+          loading ? (
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              {
+                Array.from({ length: 6 }).map(
+                  (_, index) => (
+
+                    <SkeletonCard
+                      key={index}
+                    />
+
+                  )
+                )
+              }
+
+            </div>
+
+          ) : filteredProducts.length === 0 ? (
 
             <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
 

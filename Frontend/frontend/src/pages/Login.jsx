@@ -13,6 +13,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import toast from "react-hot-toast";
+
 export default function Login() {
 
   const [phone, setPhone] =
@@ -65,13 +67,13 @@ export default function Login() {
         window.confirmationResult =
           confirmation;
 
-        alert("OTP Sent");
+        toast.success("OTP Sent");
 
       } catch (error) {
 
         console.log(error);
 
-        alert(error.message);
+        toast.error(error.message);
       }
     };
 
@@ -84,7 +86,7 @@ export default function Login() {
           otp
         );
 
-        alert(
+        toast.success(
           "Login Successful"
         );
 
@@ -94,7 +96,7 @@ export default function Login() {
 
         console.log(error);
 
-        alert(
+        toast.error(
           "Invalid OTP"
         );
       }

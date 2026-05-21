@@ -3,6 +3,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import categories from "../data/categories";
+import toast from "react-hot-toast";
 
 import {
   Navigate,
@@ -36,6 +37,9 @@ export default function AddProduct() {
 
   const [images, setImages] =
     useState([]);
+
+  const [previewImages, setPreviewImages] =
+  useState([]);  
 
   const [loading, setLoading] =
     useState(false);
@@ -100,7 +104,7 @@ export default function AddProduct() {
           }
         );
 
-        alert(
+        toast.success(
           "Product Uploaded Successfully"
         );
 
@@ -110,7 +114,7 @@ export default function AddProduct() {
 
         console.log(error);
 
-        alert(
+        toast.error(
           "Upload Failed"
         );
       }
@@ -222,14 +226,51 @@ export default function AddProduct() {
           <input
             type="file"
             multiple
-            onChange={(e) =>
-              setImages(
-                e.target.files
-              )
-            }
+            onChange={(e) => {
+
+              setImages(e.target.files);
+
+              const imageArray =
+              Array.from(e.target.files);
+
+              const previewArray =
+              imageArray.map((file) =>
+                URL.createObjectURL(file)
+              );
+
+              setPreviewImages(
+                previewArray
+              );
+
+            }}
             className="w-full border border-slate-300 p-4 rounded-2xl bg-white text-black"
-            required
           />
+
+
+          {
+            previewImages.length > 0 && (
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+
+                {
+                  previewImages.map(
+                    (image, index) => (
+
+                      <img
+                        key={index}
+                        src={image}
+                        alt=""
+                        className="w-full h-40 object-cover rounded-2xl shadow-lg"
+                      />
+
+                    )
+                  )
+                }
+
+              </div>
+
+            )
+          }
 
           <input
             type="text"

@@ -111,6 +111,38 @@ router.get(
   }
 );
 
+router.get(
+  "/related/:category/:id",
+  async (req, res) => {
+
+    try {
+
+      const products =
+        await Product.find({
+
+          category:
+            req.params.category,
+
+          _id: {
+            $ne:
+              req.params.id,
+          },
+
+        }).limit(4);
+
+      res.json(products);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+  }
+);
+
+
 router.get("/:id", async (req, res) => {
 
   try {
@@ -130,6 +162,7 @@ router.get("/:id", async (req, res) => {
 
   }
 });
+
 
 router.delete(
   "/:id",

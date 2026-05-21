@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
-import { FaMoon } from "react-icons/fa";
+
+import toast from "react-hot-toast";
 
 import {
   FaShoppingCart,
   FaPlus,
+  FaMoon,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { AuthContext } from "../context/AuthContext";
 
@@ -16,10 +20,13 @@ import { auth } from "../services/firebase";
 
 export default function Navbar() {
 
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
   const {
-  user,
-  darkMode,
-  toggleDarkMode,
+    user,
+    darkMode,
+    toggleDarkMode,
   } = useContext(AuthContext);
 
   const handleLogout = async () => {
@@ -28,7 +35,7 @@ export default function Navbar() {
 
       await signOut(auth);
 
-      alert("Logged Out");
+      toast.success("Logged Out");
 
     } catch (error) {
 
@@ -43,8 +50,10 @@ export default function Navbar() {
 
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
-        <Link to="/" >
-          
+        {/* LOGO */}
+
+        <Link to="/">
+
           <div className="flex flex-col leading-none">
 
             <div className="flex items-center gap-3 text-3xl font-bold text-blue-900">
@@ -52,12 +61,14 @@ export default function Navbar() {
               <FaShoppingCart />
 
               <span>
-               CampusCart
+
+                CampusCart
+
               </span>
 
             </div>
 
-            <span className="text-[14px] text-blue-900 font-bold ml-auto pr-1 mt-0.2 tracking-[1px]">
+            <span className="text-[14px] text-blue-900 font-bold ml-auto pr-1 tracking-[1px]">
 
               Buy • Sell • Rent
 
@@ -67,14 +78,36 @@ export default function Navbar() {
 
         </Link>
 
-        <div className="flex items-center gap-4">
+        {/* DESKTOP MENU */}
+
+        <div className="hidden md:flex items-center gap-4">
 
           <button
             onClick={toggleDarkMode}
             className="bg-slate-200 text-black px-4 py-3 rounded-2xl hover:bg-slate-300 transition-all"
           >
+
             <FaMoon />
+
           </button>
+
+          <Link
+            to="/wishlist"
+            className="bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
+          >
+
+            Wishlist
+
+          </Link>
+
+          <Link
+            to="/profile"
+            className="bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
+          >
+
+            Profile
+
+          </Link>
 
           <Link
             to="/add-product"
@@ -87,21 +120,16 @@ export default function Navbar() {
 
           </Link>
 
-          <Link
-            to="/profile"
-            className="bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
-          >
-            Profile
-          </Link>
-
           {
             user ? (
-              
+
               <button
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-5 py-3 rounded-2xl hover:bg-red-600 transition-all"
               >
+
                 Logout
+
               </button>
 
             ) : (
@@ -110,7 +138,9 @@ export default function Navbar() {
                 to="/login"
                 className="bg-blue-700 text-white px-5 py-3 rounded-2xl hover:bg-blue-800 transition-all"
               >
+
                 Login
+
               </Link>
 
             )
@@ -118,7 +148,122 @@ export default function Navbar() {
 
         </div>
 
+        {/* MOBILE MENU BUTTON */}
+
+        <button
+          onClick={() =>
+            setMenuOpen(!menuOpen)
+          }
+          className="md:hidden text-2xl text-blue-900"
+        >
+
+          {
+            menuOpen
+            ? <FaTimes />
+            : <FaBars />
+          }
+
+        </button>
+
       </div>
+
+      {/* MOBILE MENU */}
+
+      {
+        menuOpen && (
+
+          <div className="md:hidden bg-white shadow-2xl px-6 pb-6 flex flex-col gap-4">
+
+            <button
+              onClick={toggleDarkMode}
+              className="w-full bg-slate-200 text-black py-4 rounded-2xl"
+            >
+
+              Dark Mode
+
+            </button>
+
+            <Link
+              to="/wishlist"
+              onClick={() =>
+                setMenuOpen(false)
+              }
+            >
+
+              <button className="w-full bg-slate-100 py-4 rounded-2xl font-semibold">
+
+                Wishlist
+
+              </button>
+
+            </Link>
+
+            <Link
+              to="/profile"
+              onClick={() =>
+                setMenuOpen(false)
+              }
+            >
+
+              <button className="w-full bg-slate-100 py-4 rounded-2xl font-semibold">
+
+                Profile
+
+              </button>
+
+            </Link>
+
+            <Link
+              to="/add-product"
+              onClick={() =>
+                setMenuOpen(false)
+              }
+            >
+
+              <button className="w-full bg-gradient-to-r from-blue-700 to-purple-700 text-white py-4 rounded-2xl font-semibold">
+
+                Sell Product
+
+              </button>
+
+            </Link>
+
+            {
+              user ? (
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-500 text-white py-4 rounded-2xl font-semibold"
+                >
+
+                  Logout
+
+                </button>
+
+              ) : (
+
+                <Link
+                  to="/login"
+                  onClick={() =>
+                    setMenuOpen(false)
+                  }
+                >
+
+                  <button className="w-full bg-blue-700 text-white py-4 rounded-2xl font-semibold">
+
+                    Login
+
+                  </button>
+
+                </Link>
+
+              )
+            }
+
+          </div>
+
+        )
+      }
 
     </nav>
   );

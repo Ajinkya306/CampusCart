@@ -8,6 +8,18 @@ import Navbar from "../components/Navbar";
 
 import Footer from "../components/Footer";
 
+import ProductCard from "../components/ProductCard";
+
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaShareAlt,
+  FaWhatsapp,
+  FaCopy,
+} from "react-icons/fa";
+
+import toast from "react-hot-toast";
+
 export default function ProductDetails() {
 
   const { id } = useParams();
@@ -15,12 +27,44 @@ export default function ProductDetails() {
   const [product, setProduct] =
     useState(null);
 
+  const [relatedProducts, setRelatedProducts] =
+    useState([]);
+
   const [selectedImage, setSelectedImage] =
     useState("");
 
+  const [currentImageIndex, setCurrentImageIndex] =
+    useState(0);
+
   useEffect(() => {
+
     fetchProduct();
+
   }, []);
+
+  const fetchRelatedProducts =
+    async (
+      category,
+      id
+    ) => {
+
+      try {
+
+        const response =
+          await axios.get(
+            `http://localhost:5000/api/products/related/${category}/${id}`
+          );
+
+        setRelatedProducts(
+          response.data
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
 
   const fetchProduct = async () => {
 
@@ -33,9 +77,16 @@ export default function ProductDetails() {
 
       setProduct(response.data);
 
+      fetchRelatedProducts(
+        response.data.category,
+        response.data._id
+      );
+
       setSelectedImage(
         response.data.images?.[0]
       );
+
+      setCurrentImageIndex(0);
 
     } catch (error) {
 
@@ -50,6 +101,106 @@ export default function ProductDetails() {
       `https://wa.me/91${product.whatsapp}`,
       "_blank"
     );
+  };
+
+  const nextImage = () => {
+
+    const nextIndex =
+
+      currentImageIndex ===
+      product.images.length - 1
+
+      ? 0
+
+      : currentImageIndex + 1;
+
+    setCurrentImageIndex(
+      nextIndex
+    );
+
+    setSelectedImage(
+      product.images[nextIndex]
+    );
+  };
+
+  const prevImage = () => {
+
+    const prevIndex =
+
+      currentImageIndex === 0
+
+      ? product.images.length - 1
+
+      : currentImageIndex - 1;
+
+    setCurrentImageIndex(
+      prevIndex
+    );
+
+    setSelectedImage(
+      product.images[prevIndex]
+    );
+  };
+
+  const productUrl =
+    window.location.href;
+
+  const copyLink = async () => {
+
+    try {
+
+      await navigator.clipboard.writeText(
+        productUrl
+      );
+
+      toast.success(
+        "Link Copied"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  const whatsappShare = () => {
+
+    const message =
+
+      `Check out this product on CampusCart:\n\n${product.title}\n₹${product.price}\n\n${productUrl}`;
+
+    window.open(
+
+      `https://wa.me/?text=${encodeURIComponent(message)}`,
+
+      "_blank"
+
+    );
+  };
+
+  const nativeShare = async () => {
+
+    if (navigator.share) {
+
+      try {
+
+        await navigator.share({
+
+          title: product.title,
+
+          text: product.description,
+
+          url: productUrl,
+
+        });
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    }
   };
 
   if (!product) {
@@ -80,11 +231,43 @@ export default function ProductDetails() {
 
             <div className="bg-white p-5 rounded-3xl shadow-xl">
 
-              <img
-                src={selectedImage}
-                alt={product.title}
-                className="w-full h-[500px] object-cover rounded-3xl"
-              />
+              <div className="relative">
+
+                <img
+                  src={selectedImage}
+                  alt={product.title}
+                  className="w-full h-[500px] object-cover rounded-3xl"
+                />
+
+                {
+                  product.images?.length > 1 && (
+
+                    <>
+
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-4 rounded-full shadow-xl hover:scale-110 transition-all"
+                      >
+
+                        <FaChevronLeft />
+
+                      </button>
+
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-4 rounded-full shadow-xl hover:scale-110 transition-all"
+                      >
+
+                        <FaChevronRight />
+
+                      </button>
+
+                    </>
+
+                  )
+                }
+
+              </div>
 
             </div>
 
@@ -98,9 +281,13 @@ export default function ProductDetails() {
                       key={index}
                       src={image}
                       alt=""
-                      onClick={() =>
-                        setSelectedImage(image)
-                      }
+                      onClick={() => {
+
+                        setSelectedImage(image);
+
+                        setCurrentImageIndex(index);
+
+                      }}
                       className={`w-24 h-24 object-cover rounded-2xl cursor-pointer border-4 transition-all ${
                         selectedImage === image
                         ? "border-blue-700"
@@ -169,11 +356,15 @@ export default function ProductDetails() {
               <div className="flex justify-between border-b pb-4">
 
                 <span className="font-semibold text-gray-500">
+
                   College
+
                 </span>
 
                 <span className="font-bold text-gray-800">
+
                   {product.college}
+
                 </span>
 
               </div>
@@ -181,16 +372,67 @@ export default function ProductDetails() {
               <div className="flex justify-between border-b pb-4">
 
                 <span className="font-semibold text-gray-500">
+
                   City
+
                 </span>
 
                 <span className="font-bold text-gray-800">
+
                   {product.city}
+
                 </span>
 
               </div>
 
             </div>
+
+            {/* SHARE BUTTONS */}
+
+            <div className="flex flex-wrap gap-4 mt-10">
+
+              <button
+                onClick={copyLink}
+                className="flex items-center gap-2 bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
+              >
+
+                <FaCopy />
+
+                Copy Link
+
+              </button>
+
+              <button
+                onClick={whatsappShare}
+                className="flex items-center gap-2 bg-green-500 text-white px-5 py-3 rounded-2xl hover:bg-green-600 transition-all"
+              >
+
+                <FaWhatsapp />
+
+                WhatsApp
+
+              </button>
+
+              {
+                navigator.share && (
+
+                  <button
+                    onClick={nativeShare}
+                    className="flex items-center gap-2 bg-blue-700 text-white px-5 py-3 rounded-2xl hover:bg-blue-800 transition-all"
+                  >
+
+                    <FaShareAlt />
+
+                    Share
+
+                  </button>
+
+                )
+              }
+
+            </div>
+
+            {/* CONTACT BUTTON */}
 
             <div className="mt-12">
 
@@ -210,6 +452,41 @@ export default function ProductDetails() {
         </div>
 
       </div>
+
+      {/* RELATED PRODUCTS */}
+
+      {
+        relatedProducts.length > 0 && (
+
+          <section className="max-w-7xl mx-auto px-6 pb-20">
+
+            <h2 className="text-4xl font-black text-gray-800 mb-10">
+
+              Related Products
+
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+              {
+                relatedProducts.map(
+                  (item) => (
+
+                    <ProductCard
+                      key={item._id}
+                      product={item}
+                    />
+
+                  )
+                )
+              }
+
+            </div>
+
+          </section>
+
+        )
+      }
 
       <Footer />
 
