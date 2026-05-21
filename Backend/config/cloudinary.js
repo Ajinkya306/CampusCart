@@ -25,18 +25,24 @@ const storage =
 
     cloudinary,
 
-    params: {
+    params: async (
+      req,
+      file
+    ) => {
 
-      folder:
-        "campuscart",
+      return {
 
-      allowed_formats: [
-        "jpg",
-        "jpeg",
-        "png",
-        "webp",
-      ],
+        folder:
+          "campuscart",
 
+        allowed_formats: [
+          "jpg",
+          "png",
+          "jpeg",
+          "webp",
+        ],
+
+      };
     },
 
   });

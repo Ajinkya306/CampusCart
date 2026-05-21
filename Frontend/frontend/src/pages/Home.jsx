@@ -54,7 +54,7 @@ export default function Home() {
 
         const response =
           await axios.get(
-            "http://localhost:5000/api/products"
+            "https://campuscart-5wbx.onrender.com/api/products"
           );
 
         setProducts(response.data);

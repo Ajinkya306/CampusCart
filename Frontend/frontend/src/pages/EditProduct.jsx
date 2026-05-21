@@ -38,7 +38,7 @@ export default function EditProduct() {
 
         const response =
           await axios.get(
-            `http://localhost:5000/api/products/${id}`
+            `https://campuscart-5wbx.onrender.com/api/products/${id}`
           );
 
         setFormData(response.data);
@@ -67,7 +67,7 @@ export default function EditProduct() {
       try {
 
         await axios.put(
-          `http://localhost:5000/api/products/${id}`,
+          `https://campuscart-5wbx.onrender.com/api/products/${id}`,
           formData
         );
 

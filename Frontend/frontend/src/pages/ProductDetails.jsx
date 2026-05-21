@@ -52,7 +52,7 @@ export default function ProductDetails() {
 
         const response =
           await axios.get(
-            `http://localhost:5000/api/products/related/${category}/${id}`
+            `https://campuscart-5wbx.onrender.com/api/products/related/${category}/${id}`
           );
 
         setRelatedProducts(
@@ -72,8 +72,8 @@ export default function ProductDetails() {
 
       const response =
         await axios.get(
-          `http://localhost:5000/api/products/${id}`
-        );
+          `/api/products/${id}`
+        );https://campuscart-5wbx.onrender.com
 
       setProduct(response.data);
 

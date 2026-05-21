@@ -41,7 +41,7 @@ export default function Wishlist() {
 
         const response =
           await axios.get(
-            `http://localhost:5000/api/products/wishlist/user/${user.phoneNumber}`
+            `https://campuscart-5wbx.onrender.com/api/products/wishlist/user/${user.phoneNumber}`
           );
 
         setProducts(response.data);

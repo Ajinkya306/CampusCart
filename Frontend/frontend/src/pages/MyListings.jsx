@@ -29,7 +29,7 @@ export default function MyListings() {
 
         const response =
           await axios.get(
-            `http://localhost:5000/api/products/user/${user.phoneNumber}`
+            `https://campuscart-5wbx.onrender.com/api/products/user/${user.phoneNumber}`
           );
 
         setProducts(response.data);
@@ -47,7 +47,7 @@ export default function MyListings() {
       try {
 
         await axios.delete(
-          `http://localhost:5000/api/products/${id}`
+          `https://campuscart-5wbx.onrender.com/api/products/${id}`
         );
 
         fetchMyProducts();

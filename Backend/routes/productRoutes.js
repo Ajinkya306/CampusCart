@@ -28,19 +28,26 @@ router.get("/", async (req, res) => {
 router.post(
   "/",
   upload.array("images", 5),
+
   async (req, res) => {
+
+    console.log(req.body);
+
+    console.log(req.files);
 
     try {
 
-      console.log(req.files);
-
       const product =
         new Product({
+
           ...req.body,
 
-          images: req.files.map(
-            (file) => file.path
-          ),
+          images:
+            req.files.map(
+              (file) =>
+                file.path
+            ),
+
         });
 
       const savedProduct =

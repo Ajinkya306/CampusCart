@@ -53,7 +53,7 @@ export default function ProductCard({
       try {
 
         await axios.put(
-          `http://localhost:5000/api/products/wishlist/${product._id}`,
+          `https://campuscart-5wbx.onrender.com/api/products/wishlist/${product._id}`,
           {
             userPhone:
               user.phoneNumber,
