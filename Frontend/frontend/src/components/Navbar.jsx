@@ -1,21 +1,112 @@
 import { Link } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaMoon } from "react-icons/fa";
+
+import {
+  FaShoppingCart,
+  FaPlus,
+} from "react-icons/fa";
+
+import { useContext } from "react";
+
+import { AuthContext } from "../context/AuthContext";
+
+import { signOut } from "firebase/auth";
+
+import { auth } from "../services/firebase";
 
 export default function Navbar() {
+
+  const {
+  user,
+  darkMode,
+  toggleDarkMode,
+  } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+
+    try {
+
+      await signOut(auth);
+
+      alert("Logged Out");
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
   return (
+
     <nav className="bg-white shadow-md sticky top-0 z-50">
+
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-blue-900">
+
+        <Link
+          to="/"
+          className="flex items-center gap-3 text-3xl font-bold text-blue-900"
+        >
+
           <FaShoppingCart />
+
           CampusCart
+
         </Link>
 
-        <div className="flex gap-4">
-          <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-all">
-            Login
+        <div className="flex items-center gap-4">
+
+          <button
+            onClick={toggleDarkMode}
+            className="bg-slate-200 text-black px-4 py-3 rounded-2xl hover:bg-slate-300 transition-all"
+          >
+            <FaMoon />
+          </button>
+
+          <Link
+            to="/add-product"
+            className="bg-gradient-to-r from-blue-700 to-purple-700 text-white px-5 py-3 rounded-2xl flex items-center gap-2 hover:opacity-90 transition-all"
+          >
+
+            <FaPlus />
+
+            Sell Product
+
           </Link>
+
+          <Link
+            to="/profile"
+            className="bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
+          >
+            Profile
+          </Link>
+
+          {
+            user ? (
+              
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-5 py-3 rounded-2xl hover:bg-red-600 transition-all"
+              >
+                Logout
+              </button>
+
+            ) : (
+
+              <Link
+                to="/login"
+                className="bg-blue-700 text-white px-5 py-3 rounded-2xl hover:bg-blue-800 transition-all"
+              >
+                Login
+              </Link>
+
+            )
+          }
+
         </div>
+
       </div>
+
     </nav>
   );
 }
