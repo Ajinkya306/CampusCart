@@ -43,14 +43,27 @@ export default function Navbar() {
 
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
-        <Link
-          to="/"
-          className="flex items-center gap-3 text-3xl font-bold text-blue-900"
-        >
+        <Link to="/" >
+          
+          <div className="flex flex-col leading-none">
 
-          <FaShoppingCart />
+            <div className="flex items-center gap-3 text-3xl font-bold text-blue-900">
 
-          CampusCart
+              <FaShoppingCart />
+
+              <span>
+               CampusCart
+              </span>
+
+            </div>
+
+            <span className="text-[14px] text-blue-900 font-bold ml-auto pr-1 mt-0.2 tracking-[1px]">
+
+              Buy • Sell • Rent
+
+            </span>
+
+          </div>
 
         </Link>
 

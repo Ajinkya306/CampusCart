@@ -1,10 +1,8 @@
 import { useState } from "react";
-
 import axios from "axios";
-
 import { useContext } from "react";
-
 import { AuthContext } from "../context/AuthContext";
+import categories from "../data/categories";
 
 import {
   Navigate,
@@ -161,14 +159,35 @@ export default function AddProduct() {
             required
           />
 
-          <input
-            type="text"
+          <select
             name="category"
-            placeholder="Category"
             onChange={handleChange}
             className="w-full border border-slate-300 p-4 rounded-2xl bg-white text-black"
             required
-          />
+          >
+
+          <option value="">
+            Select Category
+            </option>
+
+              {
+              categories.map(
+                (category, index) => (
+
+                  <option
+                    key={index}
+                    value={category}
+                  >
+
+                    {category}
+
+                  </option>
+
+                )
+              )
+            }
+
+          </select>
 
           <input
             type="text"

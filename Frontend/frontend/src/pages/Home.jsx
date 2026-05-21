@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
-
 import axios from "axios";
-
 import Navbar from "../components/Navbar";
-
 import Hero from "../components/Hero";
-
 import Categories from "../components/Categories";
-
 import TrendingBanner from "../components/TrendingBanner";
-
 import FilterBar from "../components/FilterBar";
-
 import ProductCard from "../components/ProductCard";
-
 import Footer from "../components/Footer";
+import CategorySection from "../components/CategorySection";
 
 export default function Home() {
 
@@ -117,8 +110,10 @@ export default function Home() {
       <Navbar />
 
       <Hero />
-
-      <Categories />
+      
+      <CategorySection
+        setCategory={setCategory}
+      />
 
       <TrendingBanner />
 

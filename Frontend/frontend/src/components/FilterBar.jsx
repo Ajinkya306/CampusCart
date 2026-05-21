@@ -1,3 +1,6 @@
+import categories from "../data/categories";
+
+
 export default function FilterBar({
 
   search,
@@ -40,20 +43,25 @@ export default function FilterBar({
       >
 
         <option value="">
-          All Categories
+          Everything
         </option>
 
-        <option value="Electronics">
-          Electronics
-        </option>
+        {
+          categories.map(
+            (category, index) => (
 
-        <option value="Books">
-          Books
-        </option>
+              <option
+                key={index}
+                value={category}
+              >
 
-        <option value="Medical">
-          Medical
-        </option>
+                {category}
+
+              </option>
+
+            )
+          )
+        }
 
       </select>
 

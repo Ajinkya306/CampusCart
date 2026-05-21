@@ -21,7 +21,7 @@ export default function Hero() {
           <input
             type="text"
             placeholder="Search products..."
-            className="w-full max-w-2xl px-6 py-4 rounded-2xl text-black outline-none shadow-2xl"
+            className="w-full max-w-2xl px-6 py-4 rounded-2xl bg-white text-black outline-none shadow-2xl"
           />
         </div>
       </motion.div>
