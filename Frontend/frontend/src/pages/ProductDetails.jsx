@@ -184,11 +184,22 @@ export default function ProductDetails() {
 
     return (
 
-      <div className="text-center py-20 text-2xl">
+      <div className="min-h-screen bg-slate-100 p-10 animate-pulse">
 
-        Loading...
+        <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8">
+
+          <div className="h-[400px] bg-slate-300 rounded-3xl"></div>
+
+          <div className="mt-6 h-10 bg-slate-300 rounded w-1/2"></div>
+
+          <div className="mt-4 h-8 bg-slate-300 rounded w-1/3"></div>
+
+          <div className="mt-8 h-32 bg-slate-300 rounded"></div>
+
+        </div>
 
       </div>
+
     );
   }
 

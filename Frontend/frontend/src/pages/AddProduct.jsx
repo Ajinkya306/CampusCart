@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import categories from "../data/categories";
 import toast from "react-hot-toast";
+import imageCompression from "browser-image-compression";
 
 import {
   Navigate,
