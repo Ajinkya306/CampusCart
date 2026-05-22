@@ -27,8 +27,7 @@ export default function ProductDetails() {
   const [product, setProduct] =
     useState(null);
 
-  const [relatedProducts, setRelatedProducts] =
-    useState([]);
+  
 
   const [selectedImage, setSelectedImage] =
     useState("");
@@ -43,42 +42,9 @@ export default function ProductDetails() {
   }, []);
 
 
-  useEffect(() => {
+  
 
-    if (product) {
-
-      fetchRelatedProducts(
-        product.category,
-        product._id
-      );
-
-    }
-
-  }, [product]);
-
-  const fetchRelatedProducts =
-    async (
-      category,
-      id
-    ) => {
-
-      try {
-
-        const response =
-          await axios.get(
-            `https://campuscart-5wbx.onrender.com/api/products/related/${category}/${id}`
-          );
-
-        setRelatedProducts(
-          response.data
-        );
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
+  
 
   const fetchProduct = async () => {
 
@@ -464,40 +430,7 @@ export default function ProductDetails() {
 
       </div>
 
-      {/* RELATED PRODUCTS */}
-
-      {
-        relatedProducts.length > 0 && (
-
-          <section className="max-w-7xl mx-auto px-6 pb-20">
-
-            <h2 className="text-4xl font-black text-gray-800 mb-10">
-
-              Related Products
-
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
-              {
-                relatedProducts.map(
-                  (item) => (
-
-                    <ProductCard
-                      key={item._id}
-                      product={item}
-                    />
-
-                  )
-                )
-              }
-
-            </div>
-
-          </section>
-
-        )
-      }
+      
 
       <Footer />
 
