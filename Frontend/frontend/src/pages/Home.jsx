@@ -41,6 +41,13 @@ export default function Home() {
   const [sort, setSort] =
     useState("");
 
+  /* PAGINATION */
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
+  const productsPerPage = 8;
+
   useEffect(() => {
 
     fetchProducts();
@@ -141,6 +148,30 @@ export default function Home() {
 
   }
 
+  /* PAGINATION LOGIC */
+
+  const indexOfLastProduct =
+
+    currentPage * productsPerPage;
+
+  const indexOfFirstProduct =
+
+    indexOfLastProduct - productsPerPage;
+
+  const currentProducts =
+
+    filteredProducts.slice(
+      indexOfFirstProduct,
+      indexOfLastProduct
+    );
+
+  const totalPages =
+
+    Math.ceil(
+      filteredProducts.length /
+      productsPerPage
+    );
+
   return (
 
     <div className="bg-slate-100 min-h-screen">
@@ -186,8 +217,6 @@ export default function Home() {
             Recently Added
 
           </h2>
-
-          
 
           <p className="text-gray-500 text-lg">
 
@@ -245,22 +274,132 @@ export default function Home() {
 
           ) : (
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                {
+                  currentProducts.map(
+                    (product) => (
+
+                      <ProductCard
+                        key={product._id}
+                        product={product}
+                      />
+
+                    )
+                  )
+                }
+
+              </div>
+
+              {/* PAGINATION */}
 
               {
-                filteredProducts.map(
-                  (product) => (
+                totalPages > 1 && (
 
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                    />
+                  <div className="flex justify-center items-center gap-4 mt-12 flex-wrap">
 
-                  )
+                    <button
+
+                      onClick={() =>
+                        setCurrentPage(
+                          currentPage - 1
+                        )
+                      }
+
+                      disabled={currentPage === 1}
+
+                      className="
+                      px-5
+                      py-3
+                      rounded-2xl
+                      bg-slate-200
+                      hover:bg-slate-300
+                      disabled:opacity-50
+                      transition-all
+                      "
+
+                    >
+
+                      Previous
+
+                    </button>
+
+                    {
+                      [...Array(totalPages)].map(
+                        (_, index) => (
+
+                          <button
+
+                            key={index}
+
+                            onClick={() =>
+                              setCurrentPage(index + 1)
+                            }
+
+                            className={`
+
+                            w-12
+                            h-12
+                            rounded-2xl
+                            font-bold
+                            transition-all
+
+                            ${
+                              currentPage === index + 1
+
+                              ? "bg-blue-700 text-white"
+
+                              : "bg-slate-200 hover:bg-slate-300"
+                            }
+
+                            `}
+
+                          >
+
+                            {index + 1}
+
+                          </button>
+
+                        )
+                      )
+                    }
+
+                    <button
+
+                      onClick={() =>
+                        setCurrentPage(
+                          currentPage + 1
+                        )
+                      }
+
+                      disabled={
+                        currentPage === totalPages
+                      }
+
+                      className="
+                      px-5
+                      py-3
+                      rounded-2xl
+                      bg-slate-200
+                      hover:bg-slate-300
+                      disabled:opacity-50
+                      transition-all
+                      "
+
+                    >
+
+                      Next
+
+                    </button>
+
+                  </div>
+
                 )
               }
 
-            </div>
+            </>
 
           )
         }
