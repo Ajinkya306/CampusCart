@@ -6,20 +6,6 @@ import axios from "axios";
 
 import Navbar from "../components/Navbar";
 
-import Footer from "../components/Footer";
-
-import ProductCard from "../components/ProductCard";
-
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaShareAlt,
-  FaWhatsapp,
-  FaCopy,
-} from "react-icons/fa";
-
-import toast from "react-hot-toast";
-
 export default function ProductDetails() {
 
   const { id } = useParams();
@@ -27,25 +13,17 @@ export default function ProductDetails() {
   const [product, setProduct] =
     useState(null);
 
-  const [loading, setLoading] =
-  useState(true);
-
   const [selectedImage, setSelectedImage] =
     useState("");
 
-  const [currentImageIndex, setCurrentImageIndex] =
-    useState(0);
+  const [loading, setLoading] =
+    useState(true);
 
   useEffect(() => {
 
     fetchProduct();
 
   }, []);
-
-
-  
-
-  
 
   const fetchProduct = async () => {
 
@@ -75,113 +53,7 @@ export default function ProductDetails() {
     }
   };
 
-  const handleContact = () => {
-
-    window.open(
-      `https://wa.me/91${product.whatsapp}`,
-      "_blank"
-    );
-  };
-
-  const nextImage = () => {
-
-    const nextIndex =
-
-      currentImageIndex ===
-      product.images.length - 1
-
-      ? 0
-
-      : currentImageIndex + 1;
-
-    setCurrentImageIndex(
-      nextIndex
-    );
-
-    setSelectedImage(
-      product.images[nextIndex]
-    );
-  };
-
-  const prevImage = () => {
-
-    const prevIndex =
-
-      currentImageIndex === 0
-
-      ? product.images.length - 1
-
-      : currentImageIndex - 1;
-
-    setCurrentImageIndex(
-      prevIndex
-    );
-
-    setSelectedImage(
-      product.images[prevIndex]
-    );
-  };
-
-  const productUrl =
-    window.location.href;
-
-  const copyLink = async () => {
-
-    try {
-
-      await navigator.clipboard.writeText(
-        productUrl
-      );
-
-      toast.success(
-        "Link Copied"
-      );
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  };
-
-  const whatsappShare = () => {
-
-    const message =
-
-      `Check out this product on CampusCart:\n\n${product.title}\n₹${product.price}\n\n${productUrl}`;
-
-    window.open(
-
-      `https://wa.me/?text=${encodeURIComponent(message)}`,
-
-      "_blank"
-
-    );
-  };
-
-  const nativeShare = async () => {
-
-    if (navigator.share) {
-
-      try {
-
-        await navigator.share({
-
-          title: product.title,
-
-          text: product.description,
-
-          url: productUrl,
-
-        });
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    }
-  };
+  /* LOADING SKELETON */
 
   if (loading) {
 
@@ -193,15 +65,15 @@ export default function ProductDetails() {
 
         <div className="max-w-7xl mx-auto px-6 py-16">
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
             <div className="bg-white rounded-3xl p-6 shadow-xl animate-pulse">
 
-              <div className="h-[500px] bg-slate-300 rounded-3xl"></div>
+              <div className="h-[350px] sm:h-[500px] bg-slate-300 rounded-3xl"></div>
 
             </div>
 
-            <div className="bg-white rounded-3xl p-10 shadow-xl animate-pulse">
+            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl animate-pulse">
 
               <div className="h-10 bg-slate-300 rounded w-3/4"></div>
 
@@ -220,7 +92,9 @@ export default function ProductDetails() {
       </div>
 
     );
-  } 
+  }
+
+  /* PRODUCT NOT FOUND */
 
   if (!product) {
 
@@ -237,84 +111,105 @@ export default function ProductDetails() {
 
   return (
 
-    <div className="min-h-screen bg-slate-100">
+    <div className="bg-slate-100 min-h-screen">
 
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
 
-        <div className="grid lg:grid-cols-2 gap-14">
+        <div
 
-          {/* LEFT SIDE */}
+          className="
+          grid
+          grid-cols-1
+          lg:grid-cols-2
+          gap-8
+          lg:gap-12
+          bg-white
+          rounded-3xl
+          shadow-xl
+          overflow-hidden
+          "
 
-          <div>
+        >
 
-            <div className="bg-white p-5 rounded-3xl shadow-xl">
+          {/* IMAGE SECTION */}
 
-              <div className="relative">
+          <div className="p-4 sm:p-6">
 
-                <img
-                  loading="lazy"
-                  src={selectedImage}
-                  alt={product.title}
-                  className="w-full h-[500px] object-cover rounded-3xl"
-                />
+            {/* MAIN IMAGE */}
 
-                {
-                  product.images?.length > 1 && (
+            <img
 
-                    <>
+              loading="lazy"
 
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-4 rounded-full shadow-xl hover:scale-110 transition-all"
-                      >
+              src={
+                selectedImage
+                ?.replace(
+                  "/upload/",
+                  "/upload/f_auto,q_auto,w_1000/"
+                )
+              }
 
-                        <FaChevronLeft />
+              alt={product.title}
 
-                      </button>
+              className="
+              w-full
+              h-[300px]
+              sm:h-[450px]
+              lg:h-[500px]
+              object-cover
+              rounded-3xl
+              shadow-xl
+              "
 
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-4 rounded-full shadow-xl hover:scale-110 transition-all"
-                      >
+            />
 
-                        <FaChevronRight />
+            {/* THUMBNAILS */}
 
-                      </button>
-
-                    </>
-
-                  )
-                }
-
-              </div>
-
-            </div>
-
-            <div className="flex gap-4 mt-5 overflow-x-auto">
+            <div className="flex gap-3 sm:gap-4 mt-5 overflow-x-auto pb-2">
 
               {
                 product.images?.map(
                   (image, index) => (
 
                     <img
+
                       loading="lazy"
+
                       key={index}
-                      src={image}
+
+                      src={
+                        image?.replace(
+                          "/upload/",
+                          "/upload/f_auto,q_auto,w_300/"
+                        )
+                      }
+
                       alt=""
-                      onClick={() => {
 
-                        setSelectedImage(image);
+                      onClick={() =>
+                        setSelectedImage(image)
+                      }
 
-                        setCurrentImageIndex(index);
-
-                      }}
-                      className={`w-24 h-24 object-cover rounded-2xl cursor-pointer border-4 transition-all ${
+                      className={`
+                      w-20
+                      h-20
+                      sm:w-24
+                      sm:h-24
+                      object-cover
+                      rounded-2xl
+                      cursor-pointer
+                      border-4
+                      transition-all
+                      flex-shrink-0
+                      ${
                         selectedImage === image
                         ? "border-blue-700"
                         : "border-transparent"
-                      }`}
+                      }
+                      `}
+
                     />
 
                   )
@@ -325,47 +220,91 @@ export default function ProductDetails() {
 
           </div>
 
-          {/* RIGHT SIDE */}
+          {/* CONTENT */}
 
-          <div className="bg-white rounded-3xl shadow-xl p-10 h-fit">
+          <div className="p-6 sm:p-8 lg:p-10">
 
-            <div className="flex flex-wrap gap-3 mb-6">
+            {/* TITLE */}
 
-              <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-
-                {product.category}
-
-              </span>
-
-              <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
-
-                {product.condition}
-
-              </span>
-
-            </div>
-
-            <h1 className="text-5xl font-bold text-gray-800 leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-800 leading-tight">
 
               {product.title}
 
             </h1>
 
-            <p className="text-5xl font-bold text-blue-700 mt-8">
+            {/* PRICE */}
+
+            <p className="text-2xl sm:text-3xl lg:text-4xl text-blue-700 font-black mt-6">
 
               ₹{product.price}
 
             </p>
 
+            {/* DETAILS */}
+
+            <div className="mt-8 space-y-4 text-base sm:text-lg text-gray-600">
+
+              <p>
+
+                <span className="font-semibold">
+
+                  Category:
+
+                </span>{" "}
+
+                {product.category}
+
+              </p>
+
+              <p>
+
+                <span className="font-semibold">
+
+                  Condition:
+
+                </span>{" "}
+
+                {product.condition}
+
+              </p>
+
+              <p>
+
+                <span className="font-semibold">
+
+                  College:
+
+                </span>{" "}
+
+                {product.college}
+
+              </p>
+
+              <p>
+
+                <span className="font-semibold">
+
+                  City:
+
+                </span>{" "}
+
+                {product.city}
+
+              </p>
+
+            </div>
+
+            {/* DESCRIPTION */}
+
             <div className="mt-10">
 
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-xl sm:text-2xl font-black mb-4">
 
                 Description
 
               </h2>
 
-              <p className="text-gray-600 leading-8 text-lg">
+              <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
 
                 {product.description}
 
@@ -373,111 +312,43 @@ export default function ProductDetails() {
 
             </div>
 
-            <div className="mt-10 space-y-4">
-
-              <div className="flex justify-between border-b pb-4">
-
-                <span className="font-semibold text-gray-500">
-
-                  College
-
-                </span>
-
-                <span className="font-bold text-gray-800">
-
-                  {product.college}
-
-                </span>
-
-              </div>
-
-              <div className="flex justify-between border-b pb-4">
-
-                <span className="font-semibold text-gray-500">
-
-                  City
-
-                </span>
-
-                <span className="font-bold text-gray-800">
-
-                  {product.city}
-
-                </span>
-
-              </div>
-
-            </div>
-
-            {/* SHARE BUTTONS */}
-
-            <div className="flex flex-wrap gap-4 mt-10">
-
-              <button
-                onClick={copyLink}
-                className="flex items-center gap-2 bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
-              >
-
-                <FaCopy />
-
-                Copy Link
-
-              </button>
-
-              <button
-                onClick={whatsappShare}
-                className="flex items-center gap-2 bg-green-500 text-white px-5 py-3 rounded-2xl hover:bg-green-600 transition-all"
-              >
-
-                <FaWhatsapp />
-
-                WhatsApp
-
-              </button>
-
-              {
-                navigator.share && (
-
-                  <button
-                    onClick={nativeShare}
-                    className="flex items-center gap-2 bg-blue-700 text-white px-5 py-3 rounded-2xl hover:bg-blue-800 transition-all"
-                  >
-
-                    <FaShareAlt />
-
-                    Share
-
-                  </button>
-
-                )
-              }
-
-            </div>
-
             {/* CONTACT BUTTON */}
 
-            <div className="mt-12">
+            <a
 
-              <button
-                onClick={handleContact}
-                className="w-full bg-gradient-to-r from-blue-700 to-purple-700 text-white py-5 rounded-2xl text-xl font-bold hover:opacity-90 transition-all"
-              >
+              href={`https://wa.me/91${product.whatsapp}`}
 
-                Contact Seller
+              target="_blank"
 
-              </button>
+              className="
+              block
+              mt-10
+              bg-gradient-to-r
+              from-blue-700
+              to-purple-700
+              text-white
+              text-center
+              py-4
+              sm:py-5
+              rounded-2xl
+              text-lg
+              sm:text-xl
+              font-semibold
+              hover:opacity-90
+              transition-all
+              "
 
-            </div>
+            >
+
+              Contact Seller
+
+            </a>
 
           </div>
 
         </div>
 
       </div>
-
-      
-
-      <Footer />
 
     </div>
   );

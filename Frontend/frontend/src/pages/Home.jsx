@@ -177,15 +177,17 @@ export default function Home() {
 
       />
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
 
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between mb-6 sm:mb-10">
 
-          <h2 className="text-4xl font-bold text-gray-800">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 sm:mb-10">
 
             Recently Added
 
           </h2>
+
+          
 
           <p className="text-gray-500 text-lg">
 
@@ -200,7 +202,14 @@ export default function Home() {
         {
           loading ? (
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid
+              grid-cols-1
+              sm:grid-cols-2
+              lg:grid-cols-3
+              xl:grid-cols-4
+              gap-5
+              sm:gap-7
+              ">  
 
               {
                 Array.from({ length: 6 }).map(
