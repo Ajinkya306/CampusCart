@@ -27,7 +27,8 @@ export default function ProductDetails() {
   const [product, setProduct] =
     useState(null);
 
-  
+  const [loading, setLoading] =
+  useState(true);
 
   const [selectedImage, setSelectedImage] =
     useState("");
@@ -50,24 +51,26 @@ export default function ProductDetails() {
 
     try {
 
+      setLoading(true);
+
       const response =
         await axios.get(
-          `/api/products/${id}`
-        );https://campuscart-5wbx.onrender.com
+          `https://campuscart-5wbx.onrender.com/api/products/${id}`
+        );
 
       setProduct(response.data);
-
-      
 
       setSelectedImage(
         response.data.images?.[0]
       );
 
-      setCurrentImageIndex(0);
-
     } catch (error) {
 
       console.log(error);
+
+    } finally {
+
+      setLoading(false);
 
     }
   };
@@ -180,23 +183,52 @@ export default function ProductDetails() {
     }
   };
 
+  if (loading) {
+
+    return (
+
+      <div className="bg-slate-100 min-h-screen">
+
+        <Navbar />
+
+        <div className="max-w-7xl mx-auto px-6 py-16">
+
+          <div className="grid lg:grid-cols-2 gap-12">
+
+            <div className="bg-white rounded-3xl p-6 shadow-xl animate-pulse">
+
+              <div className="h-[500px] bg-slate-300 rounded-3xl"></div>
+
+            </div>
+
+            <div className="bg-white rounded-3xl p-10 shadow-xl animate-pulse">
+
+              <div className="h-10 bg-slate-300 rounded w-3/4"></div>
+
+              <div className="h-8 bg-slate-300 rounded w-1/3 mt-6"></div>
+
+              <div className="h-32 bg-slate-300 rounded mt-10"></div>
+
+              <div className="h-14 bg-slate-300 rounded-2xl mt-10"></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    );
+  } 
+
   if (!product) {
 
     return (
 
-      <div className="min-h-screen bg-slate-100 p-10 animate-pulse">
+      <div className="text-center py-20 text-2xl">
 
-        <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8">
-
-          <div className="h-[400px] bg-slate-300 rounded-3xl"></div>
-
-          <div className="mt-6 h-10 bg-slate-300 rounded w-1/2"></div>
-
-          <div className="mt-4 h-8 bg-slate-300 rounded w-1/3"></div>
-
-          <div className="mt-8 h-32 bg-slate-300 rounded"></div>
-
-        </div>
+        Product not found
 
       </div>
 
