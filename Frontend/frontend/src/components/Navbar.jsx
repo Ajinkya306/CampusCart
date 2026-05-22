@@ -154,7 +154,7 @@ export default function Navbar() {
           onClick={() =>
             setMenuOpen(!menuOpen)
           }
-          className="md:hidden text-2xl text-blue-900"
+          className="md:hidden text-3xl text-blue-900"
         >
 
           {
@@ -165,6 +165,8 @@ export default function Navbar() {
 
         </button>
 
+        
+
       </div>
 
       {/* MOBILE MENU */}
@@ -172,11 +174,11 @@ export default function Navbar() {
       {
         menuOpen && (
 
-          <div className="md:hidden bg-white shadow-2xl px-6 pb-6 flex flex-col gap-4">
+          <div className="md:hidden bg-white border-t px-6 py-6 flex flex-col gap-4 shadow-xl">
 
             <button
               onClick={toggleDarkMode}
-              className="w-full bg-slate-200 text-black py-4 rounded-2xl"
+              className="bg-slate-200 text-black py-3 rounded-2xl"
             >
 
               Dark Mode
@@ -185,46 +187,37 @@ export default function Navbar() {
 
             <Link
               to="/wishlist"
+              className="bg-slate-200 text-center py-3 rounded-2xl"
               onClick={() =>
                 setMenuOpen(false)
               }
             >
 
-              <button className="w-full bg-slate-100 py-4 rounded-2xl font-semibold">
-
-                Wishlist
-
-              </button>
+              Wishlist
 
             </Link>
 
             <Link
               to="/profile"
+              className="bg-slate-200 text-center py-3 rounded-2xl"
               onClick={() =>
                 setMenuOpen(false)
               }
             >
 
-              <button className="w-full bg-slate-100 py-4 rounded-2xl font-semibold">
-
-                Profile
-
-              </button>
+              Profile
 
             </Link>
 
             <Link
               to="/add-product"
+              className="bg-gradient-to-r from-blue-700 to-purple-700 text-white text-center py-3 rounded-2xl"
               onClick={() =>
                 setMenuOpen(false)
               }
             >
 
-              <button className="w-full bg-gradient-to-r from-blue-700 to-purple-700 text-white py-4 rounded-2xl font-semibold">
-
-                Sell Product
-
-              </button>
+              Sell Product
 
             </Link>
 
@@ -233,7 +226,7 @@ export default function Navbar() {
 
                 <button
                   onClick={handleLogout}
-                  className="w-full bg-red-500 text-white py-4 rounded-2xl font-semibold"
+                  className="bg-red-500 text-white py-3 rounded-2xl"
                 >
 
                   Logout
@@ -244,16 +237,10 @@ export default function Navbar() {
 
                 <Link
                   to="/login"
-                  onClick={() =>
-                    setMenuOpen(false)
-                  }
+                  className="bg-blue-700 text-white text-center py-3 rounded-2xl"
                 >
 
-                  <button className="w-full bg-blue-700 text-white py-4 rounded-2xl font-semibold">
-
-                    Login
-
-                  </button>
+                  Login
 
                 </Link>
 
