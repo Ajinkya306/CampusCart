@@ -6,110 +6,235 @@ export default function Hero({
   setSearch,
 
 }) {
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-indigo-800 to-purple-700 text-white py-28 px-6">
+
+    <section className="bg-gradient-to-r from-blue-900 via-blue-800 to-purple-700 text-white overflow-hidden">
+
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="max-w-5xl mx-auto text-center"
+
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+
+        transition={{
+          duration: 1,
+        }}
+
+        className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center"
+
       >
-        <h1 className="text-6xl font-extrabold leading-tight">
+
+        {/* TITLE */}
+
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight">
+
           CampusCart
+
         </h1>
 
-        <p className="mt-6 text-2xl text-blue-100">
+        {/* SUBTITLE */}
+
+        <p className="mt-6 text-lg sm:text-xl lg:text-2xl text-blue-100">
+
           Everything Students Need
+
         </p>
 
+        {/* SEARCH BAR */}
+
         <div className="mt-10 flex justify-center">
+
           <div
+
             className="
             flex items-center
             w-full
-            max-w-md
+            max-w-3xl
             rounded-full
-            border border-white/30
-            bg-white/80
+            border border-white/20
+            bg-white/90
             backdrop-blur-md
-            px-6
-            py-3
-            shadow-lg
+            px-4 sm:px-6
+            py-3 sm:py-4
+            shadow-2xl
             transition-all
             duration-300
-            focus-within:shadow-2xl
+            focus-within:scale-[1.01]
             "
-            >
+
+          >
+
             <input
+
               type="text"
-              placeholder="Search products..."
+
+              placeholder="Search products, books, laptops..."
+
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+
               className="
               w-full
               bg-transparent
               text-black
               outline-none
-              placeholder:text-black
+              placeholder:text-gray-500
+              text-sm sm:text-lg
               "
+
             />
+
           </div>
+
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-10 max-w-5xl mx-auto">
+        {/* STATS SECTION */}
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 text-center shadow-xl">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-12 max-w-6xl mx-auto">
 
-            <p className="text-blue-100 text-sm">
+          {/* ACTIVE LISTINGS */}
+
+          <div
+
+            className="
+            bg-white/10
+            backdrop-blur-xl
+            border border-white/10
+            rounded-3xl
+            p-5 sm:p-7
+            shadow-xl
+            hover:scale-105
+            transition-all
+            duration-300
+            "
+
+          >
+
+            <p className="text-blue-100 text-xs sm:text-sm">
+
               Active Listings
+
             </p>
 
-            <h2 className="text-4xl font-black text-white mt-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
+
               2K+
+
             </h2>
 
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 text-center shadow-xl">
+          {/* STUDENTS CONNECTED */}
 
-            <p className="text-blue-100 text-sm">
+          <div
+
+            className="
+            bg-white/10
+            backdrop-blur-xl
+            border border-white/10
+            rounded-3xl
+            p-5 sm:p-7
+            shadow-xl
+            hover:scale-105
+            transition-all
+            duration-300
+            "
+
+          >
+
+            <p className="text-blue-100 text-xs sm:text-sm">
+
               Students Connected
+
             </p>
 
-            <h2 className="text-4xl font-black text-white mt-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
+
               15K+
+
             </h2>
 
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 text-center shadow-xl">
+          {/* COLLEGES */}
 
-            <p className="text-blue-100 text-sm">
+          <div
+
+            className="
+            bg-white/10
+            backdrop-blur-xl
+            border border-white/10
+            rounded-3xl
+            p-5 sm:p-7
+            shadow-xl
+            hover:scale-105
+            transition-all
+            duration-300
+            "
+
+          >
+
+            <p className="text-blue-100 text-xs sm:text-sm">
+
               Colleges
+
             </p>
 
-            <h2 className="text-4xl font-black text-white mt-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
+
               100+
+
             </h2>
 
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 text-center shadow-xl">
+          {/* CITIES */}
 
-            <p className="text-blue-100 text-sm">
+          <div
+
+            className="
+            bg-white/10
+            backdrop-blur-xl
+            border border-white/10
+            rounded-3xl
+            p-5 sm:p-7
+            shadow-xl
+            hover:scale-105
+            transition-all
+            duration-300
+            "
+
+          >
+
+            <p className="text-blue-100 text-xs sm:text-sm">
+
               Cities
+
             </p>
 
-            <h2 className="text-4xl font-black text-white mt-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
+
               20+
+
             </h2>
 
           </div>
 
         </div>
 
-        
       </motion.div>
+
     </section>
+
   );
 }
