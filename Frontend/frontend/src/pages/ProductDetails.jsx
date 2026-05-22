@@ -42,6 +42,20 @@ export default function ProductDetails() {
 
   }, []);
 
+
+  useEffect(() => {
+
+    if (product) {
+
+      fetchRelatedProducts(
+        product.category,
+        product._id
+      );
+
+    }
+
+  }, [product]);
+
   const fetchRelatedProducts =
     async (
       category,
@@ -77,10 +91,7 @@ export default function ProductDetails() {
 
       setProduct(response.data);
 
-      fetchRelatedProducts(
-        response.data.category,
-        response.data._id
-      );
+      
 
       setSelectedImage(
         response.data.images?.[0]
