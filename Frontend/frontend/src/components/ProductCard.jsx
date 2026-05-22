@@ -106,6 +106,7 @@ export default function ProductCard({
           <div className="relative">
 
             <img
+              loading="lazy"
               src={product.images?.[0]}
               alt={product.title}
               className="w-full h-60 object-cover"

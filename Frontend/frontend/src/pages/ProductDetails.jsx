@@ -211,6 +211,7 @@ export default function ProductDetails() {
               <div className="relative">
 
                 <img
+                  loading="lazy"
                   src={selectedImage}
                   alt={product.title}
                   className="w-full h-[500px] object-cover rounded-3xl"
@@ -255,6 +256,7 @@ export default function ProductDetails() {
                   (image, index) => (
 
                     <img
+                      loading="lazy"
                       key={index}
                       src={image}
                       alt=""

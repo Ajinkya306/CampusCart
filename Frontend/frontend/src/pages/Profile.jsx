@@ -6,7 +6,16 @@ import { Navigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 
+import Footer from "../components/Footer";
+
 import { Link } from "react-router-dom";
+
+import {
+  FaBoxOpen,
+  FaHeart,
+  FaShoppingBag,
+  FaPhoneAlt,
+} from "react-icons/fa";
 
 export default function Profile() {
 
@@ -14,7 +23,9 @@ export default function Profile() {
     useContext(AuthContext);
 
   if (!user) {
+
     return <Navigate to="/login" />;
+
   }
 
   return (
@@ -25,11 +36,15 @@ export default function Profile() {
 
       <div className="max-w-7xl mx-auto px-6 py-16">
 
+        {/* PROFILE HEADER */}
+
         <div className="bg-white rounded-3xl shadow-2xl p-10">
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row md:items-center gap-8">
 
-            <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-700 to-purple-700 flex items-center justify-center text-white text-4xl font-bold">
+            {/* PROFILE CIRCLE */}
+
+            <div className="w-28 h-28 rounded-full bg-gradient-to-r from-blue-700 to-purple-700 flex items-center justify-center text-white text-5xl font-black shadow-xl">
 
               {
                 user.phoneNumber
@@ -38,62 +53,114 @@ export default function Profile() {
 
             </div>
 
+            {/* USER DETAILS */}
+
             <div>
 
-              <h1 className="text-4xl font-bold text-gray-800">
+              <h1 className="text-4xl font-black text-gray-800">
+
                 Student Account
+
               </h1>
 
-              <p className="text-gray-500 mt-2">
+              <p className="text-gray-500 mt-3 text-lg flex items-center gap-2">
+
+                <FaPhoneAlt />
+
                 {user.phoneNumber}
+
+              </p>
+
+              <p className="text-gray-400 mt-2">
+
+                Welcome back to CampusCart
+
               </p>
 
             </div>
 
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mt-16">
+          {/* DASHBOARD CARDS */}
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+
+            {/* MY LISTINGS */}
 
             <Link to="/my-listings">
 
-              <div className="bg-slate-100 rounded-3xl p-8 shadow hover:scale-105 transition-all cursor-pointer">
+              <div className="bg-slate-100 rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
 
-                <h2 className="text-2xl font-bold text-blue-700">
+                <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700 text-3xl">
+
+                  <FaBoxOpen />
+
+                </div>
+
+                <h2 className="text-3xl font-black text-blue-700 mt-6">
+
                   My Listings
+
                 </h2>
 
-                <p className="text-gray-500 mt-3">
-                  Manage products you uploaded.
+                <p className="text-gray-500 mt-4 text-lg leading-relaxed">
+
+                  Manage all products you uploaded on CampusCart.
+
                 </p>
 
               </div>
 
             </Link>
+
+            {/* WISHLIST */}
 
             <Link to="/wishlist">
 
-              <div className="bg-slate-100 rounded-3xl p-8 shadow hover:scale-105 transition-all cursor-pointer">
+              <div className="bg-slate-100 rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
 
-                <h2 className="text-2xl font-bold text-purple-700">
+                <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-700 text-3xl">
+
+                  <FaHeart />
+
+                </div>
+
+                <h2 className="text-3xl font-black text-purple-700 mt-6">
+
                   Wishlist
+
                 </h2>
 
-                <p className="text-gray-500 mt-3">
-                  Saved products appear here.
+                <p className="text-gray-500 mt-4 text-lg leading-relaxed">
+
+                  View and manage your saved favorite products.
+
                 </p>
 
               </div>
 
             </Link>
 
-            <div className="bg-slate-100 rounded-3xl p-8 shadow">
+            {/* PURCHASES */}
 
-              <h2 className="text-2xl font-bold text-indigo-700">
+            <div className="bg-slate-100 rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
+
+              <div className="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-700 text-3xl">
+
+                <FaShoppingBag />
+
+              </div>
+
+              <h2 className="text-3xl font-black text-indigo-700 mt-6">
+
                 Purchases
+
               </h2>
 
-              <p className="text-gray-500 mt-3">
-                Future purchase history section.
+              <p className="text-gray-500 mt-4 text-lg leading-relaxed">
+
+                Future purchase history and order tracking section.
+
               </p>
 
             </div>
@@ -103,6 +170,8 @@ export default function Profile() {
         </div>
 
       </div>
+
+      <Footer />
 
     </div>
   );

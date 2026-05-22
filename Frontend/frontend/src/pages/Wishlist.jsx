@@ -24,6 +24,9 @@ export default function Wishlist() {
   const [products, setProducts] =
     useState([]);
 
+  const [loading, setLoading] =
+    useState(true);
+
   useEffect(() => {
 
     if (user) {
@@ -49,6 +52,10 @@ export default function Wishlist() {
       } catch (error) {
 
         console.log(error);
+
+      } finally {
+
+        setLoading(false);
 
       }
     };
@@ -85,7 +92,42 @@ export default function Wishlist() {
         </div>
 
         {
-          products.length === 0 ? (
+          loading ? (
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              {
+                [...Array(6)].map(
+                  (_, index) => (
+
+                    <div
+                      key={index}
+                      className="bg-white rounded-3xl shadow-lg overflow-hidden animate-pulse"
+                    >
+
+                      <div className="h-60 bg-slate-300"></div>
+
+                      <div className="p-5">
+
+                        <div className="h-6 bg-slate-300 rounded w-3/4"></div>
+
+                        <div className="h-6 bg-slate-300 rounded w-1/2 mt-4"></div>
+
+                        <div className="h-4 bg-slate-300 rounded w-1/3 mt-4"></div>
+
+                        <div className="h-12 bg-slate-300 rounded-2xl mt-6"></div>
+
+                      </div>
+
+                    </div>
+
+                  )
+                )
+              }
+
+            </div>
+
+          ) : products.length === 0 ? (
 
             <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
 
