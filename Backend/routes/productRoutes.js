@@ -269,5 +269,40 @@ router.put(
   }
 );
 
+router.put(
+  "/edit/:id",
+
+  async (req, res) => {
+
+    try {
+
+      const updatedProduct =
+
+        await Product.findByIdAndUpdate(
+
+          req.params.id,
+
+          req.body,
+
+          {
+            new: true,
+          }
+
+        );
+
+      res.json(updatedProduct);
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        error:
+          "Update Failed",
+      });
+
+    }
+  }
+);
 
 module.exports = router;
