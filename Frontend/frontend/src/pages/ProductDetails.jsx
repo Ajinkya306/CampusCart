@@ -6,6 +6,9 @@ import axios from "axios";
 
 import Navbar from "../components/Navbar";
 
+import { Helmet }
+from "react-helmet-async";
+
 export default function ProductDetails() {
 
   const { id } = useParams();
@@ -112,6 +115,36 @@ export default function ProductDetails() {
   return (
 
     <div className="bg-slate-100 min-h-screen">
+
+      <Helmet>
+
+        <title>
+
+          {product.title} | CampusCart
+
+        </title>
+
+        <meta
+          name="description"
+          content={product.description}
+        />
+
+        <meta
+          property="og:title"
+          content={product.title}
+        />
+
+        <meta
+          property="og:description"
+          content={product.description}
+        />
+
+        <meta
+          property="og:image"
+          content={product.images?.[0]}
+        />
+
+      </Helmet>
 
       <Navbar />
 

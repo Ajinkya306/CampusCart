@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function MyListings() {
 
@@ -13,6 +14,9 @@ export default function MyListings() {
 
   const [products, setProducts] =
     useState([]);
+
+  const [deletingId, setDeletingId] =
+    useState(null);
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -44,7 +48,20 @@ export default function MyListings() {
   const deleteProduct =
     async (id) => {
 
+      const confirmDelete =
+
+        window.confirm(
+
+          "Are you sure you want to permanently delete this product?"
+
+        );
+
+      if (!confirmDelete)
+        return;
+
       try {
+
+        setDeletingId(id);
 
         await axios.delete(
           `https://campuscart-5wbx.onrender.com/api/products/${id}`
@@ -52,9 +69,21 @@ export default function MyListings() {
 
         fetchMyProducts();
 
+        toast.success(
+          "Product Deleted"
+        );
+
       } catch (error) {
 
         console.log(error);
+
+        toast.error(
+          "Delete Failed"
+        );
+
+      } finally {
+
+        setDeletingId(null);
 
       }
     };
@@ -85,49 +114,69 @@ export default function MyListings() {
                   <img
 
                     loading="lazy"
-                    
+
                     src={
-                          product.images?.[0]
-                          ?.replace(
-                            "/upload/",
-                            "/upload/f_auto,q_auto,w_800/"
-                          )
-                        }
+                      product.images?.[0]
+                      ?.replace(
+                        "/upload/",
+                        "/upload/f_auto,q_auto,w_800/"
+                      )
+                    }
+
                     alt={product.title}
+
                     className="w-full h-64 object-cover"
+
                   />
 
                   <div className="p-6">
 
                     <h2 className="text-2xl font-bold text-gray-800">
+
                       {product.title}
+
                     </h2>
 
                     <p className="text-blue-700 text-3xl font-bold mt-3">
+
                       ₹{product.price}
+
                     </p>
 
                     <Link
-                        to={`/edit-product/${product._id}`}
+                      to={`/edit-product/${product._id}`}
                     >
 
-                        <button
-                            className="mt-4 w-full bg-blue-700 text-white py-4 rounded-2xl hover:bg-blue-800 transition-all"
-                        >
-                            Edit Product
-                        </button>
+                      <button
+                        className="mt-4 w-full bg-blue-700 text-white py-4 rounded-2xl hover:bg-blue-800 transition-all"
+                      >
+
+                        Edit Product
+
+                      </button>
 
                     </Link>
 
                     <button
+
                       onClick={() =>
                         deleteProduct(
                           product._id
                         )
                       }
+
                       className="mt-6 w-full bg-red-500 text-white py-4 rounded-2xl hover:bg-red-600 transition-all"
+
                     >
-                      Delete Product
+
+                      {
+                        deletingId === product._id
+
+                        ? "Deleting..."
+
+                        : "Delete Product"
+                      }
+
                     </button>
 
                   </div>

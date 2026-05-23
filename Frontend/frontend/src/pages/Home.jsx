@@ -18,6 +18,9 @@ import CategorySection from "../components/CategorySection";
 
 import SkeletonCard from "../components/SkeletonCard";
 
+import { Helmet }
+from "react-helmet-async";
+
 export default function Home() {
 
   const [products, setProducts] =
@@ -26,8 +29,17 @@ export default function Home() {
   const [loading, setLoading] =
     useState(true);
 
+  const [page, setPage] =
+    useState(1);
+
+  const [hasMore, setHasMore] =
+    useState(true);
+
   const [search, setSearch] =
     useState("");
+
+  const [debouncedSearch, setDebouncedSearch] =
+  useState("");
 
   const [category, setCategory] =
     useState("");
@@ -41,18 +53,32 @@ export default function Home() {
   const [sort, setSort] =
     useState("");
 
-  /* PAGINATION */
+  /* INFINITE SCROLL */
 
-  const [currentPage, setCurrentPage] =
-    useState(1);
-
-  const productsPerPage = 8;
+  const [loadingMore, setLoadingMore] =
+    useState(false);
 
   useEffect(() => {
 
     fetchProducts();
 
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+
+  const timer =
+
+    setTimeout(() => {
+
+      setDebouncedSearch(search);
+
+    }, 400);
+
+  return () =>
+
+    clearTimeout(timer);
+
+}, [search]);
 
   const fetchProducts =
     async () => {
@@ -61,10 +87,48 @@ export default function Home() {
 
         const response =
           await axios.get(
-            "https://campuscart-5wbx.onrender.com/api/products"
+
+            `https://campuscart-5wbx.onrender.com/api/products?page=${page}&limit=8`
+
           );
 
-        setProducts(response.data);
+        console.log(response.data);
+
+        const newProducts =
+
+          Array.isArray(response.data)
+            ? response.data
+            : response.data.products || [];
+
+        setProducts((prev) => {
+
+          const combined = [
+            ...prev,
+            ...newProducts
+          ];
+
+          const uniqueProducts =
+
+            combined.filter(
+              (product, index, self) =>
+
+                index ===
+                self.findIndex(
+                  (p) =>
+                    p._id === product._id
+                )
+            );
+
+          return uniqueProducts;
+        });
+
+        setHasMore(
+
+          response.data.totalPages
+            ? page < response.data.totalPages
+            : newProducts.length > 0
+
+        );
 
         setLoading(false);
 
@@ -77,24 +141,53 @@ export default function Home() {
       }
     };
 
+  /* FILTER PRODUCTS */
+
   let filteredProducts =
+
     products.filter((product) => {
+
+      const searchText =
+
+        debouncedSearch
+          .trim()
+          .toLowerCase()
 
       const matchesSearch =
 
         product.title
           ?.toLowerCase()
-          .includes(
-            search.toLowerCase()
-          )
+          ?.includes(searchText)
 
         ||
 
         product.category
           ?.toLowerCase()
-          .includes(
-            search.toLowerCase()
-          );
+          ?.includes(searchText)
+
+        ||
+
+        product.description
+          ?.toLowerCase()
+          ?.includes(searchText)
+
+        ||
+
+        product.college
+          ?.toLowerCase()
+          ?.includes(searchText)
+
+        ||
+
+        product.city
+          ?.toLowerCase()
+          ?.includes(searchText)
+
+        ||
+
+        product.condition
+          ?.toLowerCase()
+          ?.includes(searchText);
 
       const matchesCategory =
 
@@ -108,7 +201,7 @@ export default function Home() {
 
         product.college
           ?.toLowerCase()
-          .includes(
+          ?.includes(
             college.toLowerCase()
           );
 
@@ -128,13 +221,17 @@ export default function Home() {
         matchesCondition
 
       );
+
     });
+
+  /* SORTING */
 
   if (sort === "low") {
 
     filteredProducts.sort(
       (a, b) =>
-        a.price - b.price
+        Number(a.price) -
+        Number(b.price)
     );
 
   }
@@ -143,38 +240,111 @@ export default function Home() {
 
     filteredProducts.sort(
       (a, b) =>
-        b.price - a.price
+        Number(b.price) -
+        Number(a.price)
     );
 
   }
 
-  /* PAGINATION LOGIC */
+  /* INFINITE SCROLL EFFECT */
 
-  const indexOfLastProduct =
+  useEffect(() => {
 
-    currentPage * productsPerPage;
+    const handleScroll = () => {
 
-  const indexOfFirstProduct =
+      if (
 
-    indexOfLastProduct - productsPerPage;
+        window.innerHeight +
+        document.documentElement.scrollTop + 200
 
-  const currentProducts =
+        >=
 
-    filteredProducts.slice(
-      indexOfFirstProduct,
-      indexOfLastProduct
+        document.documentElement.offsetHeight
+
+      ) {
+
+        if (hasMore && !loadingMore) {
+
+          setLoadingMore(true);
+
+          setTimeout(() => {
+
+            setPage((prev) => {
+
+              if (loadingMore)
+                return prev;
+
+              return prev + 1;
+
+            });
+
+            setLoadingMore(false);
+
+          }, 800);
+
+        }
+
+      }
+
+    };
+
+    window.addEventListener(
+      "scroll",
+      handleScroll
     );
 
-  const totalPages =
+    return () =>
 
-    Math.ceil(
-      filteredProducts.length /
-      productsPerPage
-    );
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+
+  }, [
+    hasMore,
+    loadingMore
+  ]);
 
   return (
 
     <div className="bg-slate-100 min-h-screen">
+      
+      <Helmet>
+
+        <title>
+
+          CampusCart | Buy & Sell Student Products
+
+        </title>
+
+        <meta
+
+          name="description"
+
+          content="
+          CampusCart is a student marketplace for buying and selling laptops, books, gadgets, furniture, notes, and more across colleges.
+          "
+
+        />
+
+        <meta
+          property="og:title"
+          content="CampusCart"
+        />
+
+        <meta
+          property="og:description"
+          content="
+          Buy and sell student products across colleges with CampusCart.
+          "
+        />
+
+        <meta
+          property="og:type"
+          content="website"
+        />
+
+      </Helmet>
 
       <Navbar />
 
@@ -231,14 +401,17 @@ export default function Home() {
         {
           loading ? (
 
-            <div className="grid
+            <div
+              className="
+              grid
               grid-cols-1
               sm:grid-cols-2
               lg:grid-cols-3
               xl:grid-cols-4
               gap-5
               sm:gap-7
-              ">  
+              "
+            >
 
               {
                 Array.from({ length: 6 }).map(
@@ -279,7 +452,7 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 {
-                  currentProducts.map(
+                  filteredProducts.map(
                     (product) => (
 
                       <ProductCard
@@ -293,106 +466,24 @@ export default function Home() {
 
               </div>
 
-              {/* PAGINATION */}
+              {/* LOADING MORE */}
 
               {
-                totalPages > 1 && (
+                loadingMore && (
 
-                  <div className="flex justify-center items-center gap-4 mt-12 flex-wrap">
+                  <div className="flex justify-center mt-12">
 
-                    <button
-
-                      onClick={() =>
-                        setCurrentPage(
-                          currentPage - 1
-                        )
-                      }
-
-                      disabled={currentPage === 1}
-
+                    <div
                       className="
-                      px-5
-                      py-3
-                      rounded-2xl
-                      bg-slate-200
-                      hover:bg-slate-300
-                      disabled:opacity-50
-                      transition-all
+                      w-14
+                      h-14
+                      border-4
+                      border-blue-700
+                      border-t-transparent
+                      rounded-full
+                      animate-spin
                       "
-
-                    >
-
-                      Previous
-
-                    </button>
-
-                    {
-                      [...Array(totalPages)].map(
-                        (_, index) => (
-
-                          <button
-
-                            key={index}
-
-                            onClick={() =>
-                              setCurrentPage(index + 1)
-                            }
-
-                            className={`
-
-                            w-12
-                            h-12
-                            rounded-2xl
-                            font-bold
-                            transition-all
-
-                            ${
-                              currentPage === index + 1
-
-                              ? "bg-blue-700 text-white"
-
-                              : "bg-slate-200 hover:bg-slate-300"
-                            }
-
-                            `}
-
-                          >
-
-                            {index + 1}
-
-                          </button>
-
-                        )
-                      )
-                    }
-
-                    <button
-
-                      onClick={() =>
-                        setCurrentPage(
-                          currentPage + 1
-                        )
-                      }
-
-                      disabled={
-                        currentPage === totalPages
-                      }
-
-                      className="
-                      px-5
-                      py-3
-                      rounded-2xl
-                      bg-slate-200
-                      hover:bg-slate-300
-                      disabled:opacity-50
-                      transition-all
-                      "
-
-                    >
-
-                      Next
-
-                    </button>
+                    ></div>
 
                   </div>
 
