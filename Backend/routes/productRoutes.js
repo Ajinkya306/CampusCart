@@ -49,9 +49,6 @@ export default function Home() {
 
   /* INFINITE SCROLL */
 
-  const [visibleProducts, setVisibleProducts] =
-    useState(8);
-
   const [loadingMore, setLoadingMore] =
     useState(false);
 
@@ -225,15 +222,6 @@ export default function Home() {
 
   }
 
-  /* DISPLAYED PRODUCTS */
-
-  const displayedProducts =
-
-    filteredProducts.slice(
-      0,
-      visibleProducts
-    );
-
   /* INFINITE SCROLL EFFECT */
 
   useEffect(() => {
@@ -257,8 +245,8 @@ export default function Home() {
 
           setTimeout(() => {
 
-            setPage(
-              (prev) => prev + 1
+            setPage((prev) =>
+              prev + 1
             );
 
             setLoadingMore(false);
@@ -284,8 +272,6 @@ export default function Home() {
       );
 
   }, [
-    visibleProducts,
-    filteredProducts.length,
     hasMore,
     loadingMore
   ]);
@@ -400,7 +386,7 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 {
-                  displayedProducts.map(
+                  filteredProducts.map(
                     (product) => (
 
                       <ProductCard
