@@ -1,438 +1,365 @@
-import { useEffect, useState } from "react";
+const express = require("express");
 
-import axios from "axios";
+const router = express.Router();
 
-import Navbar from "../components/Navbar";
+const Product = require("../models/Product");
 
-import Hero from "../components/Hero";
+const upload = require("../middleware/upload");
 
-import TrendingBanner from "../components/TrendingBanner";
+/* GET ALL PRODUCTS WITH PAGINATION */
 
-import FilterBar from "../components/FilterBar";
+router.get(
 
-import ProductCard from "../components/ProductCard";
+  "/",
 
-import Footer from "../components/Footer";
+  async (req, res) => {
 
-import CategorySection from "../components/CategorySection";
+    try {
 
-import SkeletonCard from "../components/SkeletonCard";
+      const page =
 
-export default function Home() {
+        parseInt(req.query.page)
+        || 1;
 
-  const [products, setProducts] =
-    useState([]);
+      const limit =
 
-  const [loading, setLoading] =
-    useState(true);
+        parseInt(req.query.limit)
+        || 8;
 
-  const [page, setPage] =
-    useState(1);
+      const skip =
 
-  const [hasMore, setHasMore] =
-    useState(true);
+        (page - 1) * limit;
 
-  const [search, setSearch] =
-    useState("");
+      const products =
 
-  const [category, setCategory] =
-    useState("");
+        await Product.find()
 
-  const [college, setCollege] =
-    useState("");
+          .sort({
+            createdAt: -1,
+          })
 
-  const [condition, setCondition] =
-    useState("");
+          .skip(skip)
 
-  const [sort, setSort] =
-    useState("");
+          .limit(limit);
 
-  /* INFINITE SCROLL */
+      const totalProducts =
 
-  const [loadingMore, setLoadingMore] =
-    useState(false);
+        await Product.countDocuments();
 
-  useEffect(() => {
+      res.json({
 
-    fetchProducts();
+        products,
 
-  }, [page]);
+        totalPages:
 
-  const fetchProducts =
-    async () => {
+          Math.ceil(
+            totalProducts / limit
+          ),
 
-      try {
+        currentPage:
+          page,
 
-        const response =
-          await axios.get(
+      });
 
-            `https://campuscart-5wbx.onrender.com/api/products?page=${page}&limit=8`
+    } catch (error) {
 
-          );
+      console.log(error);
 
-        console.log(response.data);
+      res.status(500).json({
+        error:
+          "Failed To Fetch Products",
+      });
 
-        const newProducts =
+    }
 
-          Array.isArray(response.data)
-            ? response.data
-            : response.data.products || [];
+  }
+);
 
-        setProducts((prev) => {
+/* GET SINGLE PRODUCT */
 
-          const combined = [
-            ...prev,
-            ...newProducts
-          ];
+router.get(
 
-          const uniqueProducts =
+  "/:id",
 
-            combined.filter(
-              (product, index, self) =>
+  async (req, res) => {
 
-                index ===
-                self.findIndex(
-                  (p) =>
-                    p._id === product._id
-                )
-            );
+    try {
 
-          return uniqueProducts;
-        });
+      const product =
 
-        setHasMore(
-
-          response.data.totalPages
-            ? page < response.data.totalPages
-            : newProducts.length > 0
-
+        await Product.findById(
+          req.params.id
         );
 
-        setLoading(false);
+      res.json(product);
 
-      } catch (error) {
+    } catch (error) {
 
-        console.log(error);
+      console.log(error);
 
-        setLoading(false);
+      res.status(500).json({
+        error:
+          "Product Not Found",
+      });
 
-      }
-    };
+    }
 
-  /* FILTER PRODUCTS */
+  }
+);
 
-  let filteredProducts =
+/* ADD PRODUCT */
 
-    products.filter((product) => {
+router.post(
 
-      const searchText =
+  "/",
 
-        search.trim().toLowerCase();
+  upload.array("images", 5),
 
-      const matchesSearch =
+  async (req, res) => {
 
-        product.title
-          ?.toLowerCase()
-          ?.includes(searchText)
+    try {
 
-        ||
+      const imageUrls =
 
-        product.category
-          ?.toLowerCase()
-          ?.includes(searchText)
+        req.files.map(
+          (file) => file.path
+        );
 
-        ||
+      const newProduct =
 
-        product.description
-          ?.toLowerCase()
-          ?.includes(searchText)
+        new Product({
 
-        ||
+          ...req.body,
 
-        product.college
-          ?.toLowerCase()
-          ?.includes(searchText)
+          images: imageUrls,
 
-        ||
+        });
 
-        product.city
-          ?.toLowerCase()
-          ?.includes(searchText)
+      await newProduct.save();
 
-        ||
-
-        product.condition
-          ?.toLowerCase()
-          ?.includes(searchText);
-
-      const matchesCategory =
-
-        category === ""
-
-        ||
-
-        product.category === category;
-
-      const matchesCollege =
-
-        product.college
-          ?.toLowerCase()
-          ?.includes(
-            college.toLowerCase()
-          );
-
-      const matchesCondition =
-
-        condition === ""
-
-        ||
-
-        product.condition === condition;
-
-      return (
-
-        matchesSearch &&
-        matchesCategory &&
-        matchesCollege &&
-        matchesCondition
-
+      res.status(201).json(
+        newProduct
       );
 
-    });
+    } catch (error) {
 
-  /* SORTING */
+      console.log(error);
 
-  if (sort === "low") {
+      res.status(500).json({
+        error:
+          "Product Upload Failed",
+      });
 
-    filteredProducts.sort(
-      (a, b) =>
-        Number(a.price) -
-        Number(b.price)
-    );
-
-  }
-
-  if (sort === "high") {
-
-    filteredProducts.sort(
-      (a, b) =>
-        Number(b.price) -
-        Number(a.price)
-    );
+    }
 
   }
+);
 
-  /* INFINITE SCROLL EFFECT */
+/* GET USER PRODUCTS */
 
-  useEffect(() => {
+router.get(
 
-    const handleScroll = () => {
+  "/user/:phone",
+
+  async (req, res) => {
+
+    try {
+
+      const products =
+
+        await Product.find({
+
+          sellerPhone:
+            req.params.phone,
+
+        }).sort({
+          createdAt: -1,
+        });
+
+      res.json(products);
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        error:
+          "Failed To Fetch User Products",
+      });
+
+    }
+
+  }
+);
+
+/* WISHLIST TOGGLE */
+
+router.put(
+
+  "/wishlist/:id",
+
+  async (req, res) => {
+
+    try {
+
+      const product =
+
+        await Product.findById(
+          req.params.id
+        );
+
+      const userPhone =
+        req.body.userPhone;
 
       if (
 
-        window.innerHeight +
-        document.documentElement.scrollTop + 200
-
-        >=
-
-        document.documentElement.offsetHeight
+        product.wishlistUsers.includes(
+          userPhone
+        )
 
       ) {
 
-        if (hasMore && !loadingMore) {
+        product.wishlistUsers =
 
-          setLoadingMore(true);
+          product.wishlistUsers.filter(
+            (phone) =>
+              phone !== userPhone
+          );
 
-          setTimeout(() => {
+      } else {
 
-            setPage((prev) =>
-              prev + 1
-            );
-
-            setLoadingMore(false);
-
-          }, 800);
-
-        }
+        product.wishlistUsers.push(
+          userPhone
+        );
 
       }
 
-    };
+      await product.save();
 
-    window.addEventListener(
-      "scroll",
-      handleScroll
-    );
+      res.json(product);
 
-    return () =>
+    } catch (error) {
 
-      window.removeEventListener(
-        "scroll",
-        handleScroll
+      console.log(error);
+
+      res.status(500).json({
+        error:
+          "Wishlist Update Failed",
+      });
+
+    }
+
+  }
+);
+
+/* GET USER WISHLIST */
+
+router.get(
+
+  "/wishlist/user/:phone",
+
+  async (req, res) => {
+
+    try {
+
+      const products =
+
+        await Product.find({
+
+          wishlistUsers:
+            req.params.phone,
+
+        }).sort({
+          createdAt: -1,
+        });
+
+      res.json(products);
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        error:
+          "Failed To Fetch Wishlist",
+      });
+
+    }
+
+  }
+);
+
+/* DELETE PRODUCT */
+
+router.delete(
+
+  "/:id",
+
+  async (req, res) => {
+
+    try {
+
+      await Product.findByIdAndDelete(
+        req.params.id
       );
 
-  }, [
-    hasMore,
-    loadingMore
-  ]);
+      res.json({
+        message:
+          "Product Deleted",
+      });
 
-  return (
+    } catch (error) {
 
-    <div className="bg-slate-100 min-h-screen">
+      console.log(error);
 
-      <Navbar />
+      res.status(500).json({
+        error:
+          "Delete Failed",
+      });
 
-      <Hero
-        search={search}
-        setSearch={setSearch}
-      />
+    }
 
-      <CategorySection
-        setCategory={setCategory}
-      />
+  }
+);
 
-      <TrendingBanner />
+/* EDIT PRODUCT */
 
-      <FilterBar
+router.put(
 
-        search={search}
-        setSearch={setSearch}
+  "/edit/:id",
 
-        category={category}
-        setCategory={setCategory}
+  async (req, res) => {
 
-        college={college}
-        setCollege={setCollege}
+    try {
 
-        condition={condition}
-        setCondition={setCondition}
+      const updatedProduct =
 
-        sort={sort}
-        setSort={setSort}
+        await Product.findByIdAndUpdate(
 
-      />
+          req.params.id,
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+          req.body,
 
-        <div className="flex items-center justify-between mb-6 sm:mb-10">
+          {
+            new: true,
+          }
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 sm:mb-10">
+        );
 
-            Recently Added
+      res.json(updatedProduct);
 
-          </h2>
+    } catch (error) {
 
-          <p className="text-gray-500 text-lg">
+      console.log(error);
 
-            {
-              filteredProducts.length
-            } Products
+      res.status(500).json({
+        error:
+          "Update Failed",
+      });
 
-          </p>
+    }
 
-        </div>
+  }
+);
 
-        {
-          loading ? (
-
-            <div
-              className="
-              grid
-              grid-cols-1
-              sm:grid-cols-2
-              lg:grid-cols-3
-              xl:grid-cols-4
-              gap-5
-              sm:gap-7
-              "
-            >
-
-              {
-                Array.from({ length: 6 }).map(
-                  (_, index) => (
-
-                    <SkeletonCard
-                      key={index}
-                    />
-
-                  )
-                )
-              }
-
-            </div>
-
-          ) : filteredProducts.length === 0 ? (
-
-            <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
-
-              <h2 className="text-3xl font-bold text-gray-700">
-
-                No Products Found
-
-              </h2>
-
-              <p className="text-gray-500 mt-4 text-lg">
-
-                Try searching with different keywords.
-
-              </p>
-
-            </div>
-
-          ) : (
-
-            <>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                {
-                  filteredProducts.map(
-                    (product) => (
-
-                      <ProductCard
-                        key={product._id}
-                        product={product}
-                      />
-
-                    )
-                  )
-                }
-
-              </div>
-
-              {/* LOADING MORE */}
-
-              {
-                loadingMore && (
-
-                  <div className="flex justify-center mt-12">
-
-                    <div
-                      className="
-                      w-14
-                      h-14
-                      border-4
-                      border-blue-700
-                      border-t-transparent
-                      rounded-full
-                      animate-spin
-                      "
-                    ></div>
-
-                  </div>
-
-                )
-              }
-
-            </>
-
-          )
-        }
-
-      </section>
-
-      <Footer />
-
-    </div>
-  );
-}
+module.exports = router;
