@@ -83,7 +83,16 @@ export default function MyListings() {
                 >
 
                   <img
-                    src={product.image}
+
+                    loading="lazy"
+                    
+                    src={
+                          product.images?.[0]
+                          ?.replace(
+                            "/upload/",
+                            "/upload/f_auto,q_auto,w_800/"
+                          )
+                        }
                     alt={product.title}
                     className="w-full h-64 object-cover"
                   />
