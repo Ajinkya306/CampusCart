@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
 import MyListings from "./pages/MyListings";
-import Wishlist from "./pages/Wishlist";
+// import Wishlist from "./pages/Wishlist";
 import EditProduct from "./pages/EditProduct";
 
 function App() {
