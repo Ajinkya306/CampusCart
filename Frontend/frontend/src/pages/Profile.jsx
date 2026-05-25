@@ -47,8 +47,14 @@ export default function Profile() {
             <div className="w-28 h-28 rounded-full bg-gradient-to-r from-blue-700 to-purple-700 flex items-center justify-center text-white text-5xl font-black shadow-xl">
 
               {
-                user.email
-                ?.slice(-2)
+                (
+                  user?.name
+                  || user?.displayName
+                  || "CC"
+                )
+
+                .slice(0, 2)
+                .toUpperCase()
               }
 
             </div>
@@ -59,15 +65,20 @@ export default function Profile() {
 
               <h1 className="text-4xl font-black text-gray-800">
 
-                {user?.name || "Student"}
+                {
+                  user?.name
+                  || user?.displayName
+                  || "CampusCart User"
+                }
 
               </h1>
 
-              <p className="text-gray-500 mt-3 text-lg flex items-center gap-2">
+              <p className="text-gray-500 mt-3 text-lg break-all">
 
-                <FaPhoneAlt />
-
-                {user.email}
+                {
+                  user?.email
+                  || "No Email Found"
+                }
 
               </p>
 
