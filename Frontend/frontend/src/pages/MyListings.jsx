@@ -33,7 +33,7 @@ export default function MyListings() {
 
         const response =
           await axios.get(
-            `https://campuscart-5wbx.onrender.com/api/products/user/${user.phoneNumber}`
+            `https://campuscart-5wbx.onrender.com/api/products/user/${user.email}`
           );
 
         setProducts(response.data);

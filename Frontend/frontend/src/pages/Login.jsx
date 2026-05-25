@@ -1,13 +1,11 @@
-import { useState } from "react";
+import {
+  signInWithPopup,
+} from "firebase/auth";
 
 import {
   auth,
+  googleProvider,
 } from "../services/firebase";
-
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
 
 import {
   useNavigate,
@@ -17,73 +15,49 @@ import toast from "react-hot-toast";
 
 export default function Login() {
 
-  const [phone, setPhone] =
-    useState("");
-
-  const [otp, setOtp] =
-    useState("");
-
   const navigate =
     useNavigate();
 
-  const setupRecaptcha =
-    () => {
+  // GOOGLE LOGIN
 
-      if (
-        !window.recaptchaVerifier
-      ) {
-
-        window.recaptchaVerifier =
-          new RecaptchaVerifier(
-            auth,
-            "recaptcha-container",
-            {
-              size: "invisible",
-            }
-          );
-      }
-    };
-
-  const sendOTP =
+  const handleGoogleLogin =
     async () => {
 
       try {
 
-        setupRecaptcha();
+        const result =
 
-        const appVerifier =
-          window.recaptchaVerifier;
-
-        const formattedPhone =
-          `+91${phone}`;
-
-        const confirmation =
-          await signInWithPhoneNumber(
+          await signInWithPopup(
+            
             auth,
-            formattedPhone,
-            appVerifier
+            googleProvider
           );
+        
+        console.log(result.user);
+        
+        const user =
+          result.user;
 
-        window.confirmationResult =
-          confirmation;
+        localStorage.setItem(
 
-        toast.success("OTP Sent");
+          "campusUser",
 
-      } catch (error) {
+          JSON.stringify({
 
-        console.log(error);
+            name:
+              user.displayName,
 
-        toast.error(error.message);
-      }
-    };
+            email:
+              user.email,
 
-  const verifyOTP =
-    async () => {
+            photo:
+              user.photoURL,
 
-      try {
+            uid:
+              user.uid,
 
-        await window.confirmationResult.confirm(
-          otp
+          })
+
         );
 
         toast.success(
@@ -97,9 +71,11 @@ export default function Login() {
         console.log(error);
 
         toast.error(
-          "Invalid OTP"
+          "Google Login Failed"
         );
+
       }
+
     };
 
   return (
@@ -114,46 +90,47 @@ export default function Login() {
 
         <div className="space-y-6">
 
-          <input
-            type="text"
-            placeholder="Enter 10 digit phone number"
-            value={phone}
-            onChange={(e) =>
-              setPhone(e.target.value)
-            }
-            className="w-full border border-slate-300 p-4 rounded-2xl bg-white text-black"
-          />
-
           <button
-            onClick={sendOTP}
-            className="w-full bg-blue-700 text-white py-4 rounded-2xl text-lg hover:bg-blue-800 transition-all"
-          >
-            Send OTP
-          </button>
 
-          <input
-            type="text"
-            placeholder="Enter OTP"
-            value={otp}
-            onChange={(e) =>
-              setOtp(e.target.value)
+            onClick={
+              handleGoogleLogin
             }
-            className="w-full border border-slate-300 p-4 rounded-2xl bg-white text-black"
-          />
 
-          <button
-            onClick={verifyOTP}
-            className="w-full bg-gradient-to-r from-blue-700 to-purple-700 text-white py-4 rounded-2xl text-lg hover:opacity-90 transition-all"
+            className="
+            w-full
+            bg-white
+            border
+            border-gray-300
+            py-4
+            rounded-2xl
+            flex
+            items-center
+            justify-center
+            gap-4
+            text-lg
+            font-semibold
+            hover:bg-gray-100
+            transition-all
+            "
+
           >
-            Verify OTP
+
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+              alt="Google"
+              className="w-6 h-6"
+            />
+
+            Continue with Google
+
           </button>
 
         </div>
 
-        <div id="recaptcha-container"></div>
-
       </div>
 
     </div>
+
   );
+
 }

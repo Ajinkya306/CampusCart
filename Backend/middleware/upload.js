@@ -1,25 +1,44 @@
-const multer = require("multer");
+const multer =
+  require("multer");
+
+const cloudinary =
+  require("cloudinary").v2;
 
 const {
   CloudinaryStorage,
-} = require("multer-storage-cloudinary");
+} = require(
+  "multer-storage-cloudinary"
+);
 
-const cloudinary =
-  require("../config/cloudinary");
+cloudinary.config({
+
+  cloud_name:
+    process.env.CLOUD_NAME,
+
+  api_key:
+    process.env.CLOUD_API_KEY,
+
+  api_secret:
+    process.env.CLOUD_API_SECRET,
+
+});
 
 const storage =
   new CloudinaryStorage({
 
-    cloudinary,
+    cloudinary:
+
+      cloudinary,
 
     params: {
 
-      folder: "campuscart",
+      folder:
+        "campuscart",
 
       allowed_formats: [
         "jpg",
-        "jpeg",
         "png",
+        "jpeg",
         "webp",
       ],
 
@@ -28,6 +47,13 @@ const storage =
   });
 
 const upload =
-  multer({ storage });
+  multer({
 
-module.exports = upload;
+    storage:
+
+      storage,
+
+  });
+
+module.exports =
+  upload;

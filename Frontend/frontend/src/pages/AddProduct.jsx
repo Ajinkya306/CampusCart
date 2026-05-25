@@ -1,10 +1,14 @@
 import { useState } from "react";
+
 import axios from "axios";
+
 import { useContext } from "react";
+
 import { AuthContext } from "../context/AuthContext";
+
 import categories from "../data/categories";
+
 import toast from "react-hot-toast";
-import imageCompression from "browser-image-compression";
 
 import {
   Navigate,
@@ -20,27 +24,39 @@ export default function AddProduct() {
     useNavigate();
 
   if (!user) {
+
     return <Navigate to="/login" />;
+
   }
 
   const [formData, setFormData] =
     useState({
+
       title: "",
+
       description: "",
+
       price: "",
+
       category: "",
+
       city: "Pune",
+
       college: "",
+
       condition: "",
+
       type: "sell",
+
       whatsapp: "",
+
     });
 
   const [images, setImages] =
     useState([]);
 
   const [previewImages, setPreviewImages] =
-  useState([]);  
+    useState([]);
 
   const [loading, setLoading] =
     useState(false);
@@ -48,10 +64,14 @@ export default function AddProduct() {
   const handleChange = (e) => {
 
     setFormData({
+
       ...formData,
+
       [e.target.name]:
         e.target.value,
+
     });
+
   };
 
   const handleSubmit =
@@ -61,48 +81,62 @@ export default function AddProduct() {
 
       setLoading(true);
 
-      const data =
-        new FormData();
+      try {
 
-      Object.keys(formData).forEach(
-        (key) => {
+        const data =
+          new FormData();
+
+        Object.keys(formData).forEach(
+          (key) => {
+
+            data.append(
+              key,
+              formData[key]
+            );
+
+          }
+        );
+
+        /* GOOGLE AUTH USER */
+
+        data.append(
+
+          "sellerEmail",
+
+          user.email
+
+        );
+
+        for (
+          let i = 0;
+          i < images.length;
+          i++
+        ) {
 
           data.append(
-            key,
-            formData[key]
+            "images",
+            images[i]
           );
 
         }
-      );
-
-      data.append(
-        "sellerPhone",
-        user.phoneNumber
-      );
-
-      for (
-        let i = 0;
-        i < images.length;
-        i++
-      ) {
-
-        data.append(
-          "images",
-          images[i]
-        );
-      }
-
-      try {
 
         await axios.post(
+
           "https://campuscart-5wbx.onrender.com/api/products",
+
           data,
+
           {
+
             headers: {
+
               "Content-Type":
                 "multipart/form-data",
+
             },
+
           }
+
         );
 
         toast.success(
@@ -118,9 +152,11 @@ export default function AddProduct() {
         toast.error(
           "Upload Failed"
         );
+
       }
 
       setLoading(false);
+
     };
 
   return (
@@ -133,7 +169,9 @@ export default function AddProduct() {
       >
 
         <h1 className="text-5xl font-bold text-blue-900 mb-10">
+
           Sell Product
+
         </h1>
 
         <div className="grid gap-5">
@@ -171,11 +209,11 @@ export default function AddProduct() {
             required
           >
 
-          <option value="">
-            Select Category
+            <option value="">
+              Select Category
             </option>
 
-              {
+            {
               categories.map(
                 (category, index) => (
 
@@ -229,24 +267,34 @@ export default function AddProduct() {
             multiple
             onChange={(e) => {
 
-              setImages(e.target.files);
+              setImages(
+                e.target.files
+              );
 
               const imageArray =
-              Array.from(e.target.files);
+                Array.from(
+                  e.target.files
+                );
 
               const previewArray =
-              imageArray.map((file) =>
-                URL.createObjectURL(file)
-              );
+
+                imageArray.map(
+                  (file) =>
+
+                    URL.createObjectURL(
+                      file
+                    )
+
+                );
 
               setPreviewImages(
                 previewArray
               );
 
             }}
+
             className="w-full border border-slate-300 p-4 rounded-2xl bg-white text-black"
           />
-
 
           {
             previewImages.length > 0 && (
@@ -284,7 +332,8 @@ export default function AddProduct() {
 
           <button
             type="submit"
-            className="bg-gradient-to-r from-blue-700 to-purple-700 text-white py-4 rounded-2xl text-lg font-semibold hover:opacity-90 transition-all"
+            disabled={loading}
+            className="bg-gradient-to-r from-blue-700 to-purple-700 text-white py-4 rounded-2xl text-lg font-semibold hover:opacity-90 transition-all disabled:opacity-50"
           >
 
             {
@@ -300,5 +349,7 @@ export default function AddProduct() {
       </form>
 
     </div>
+
   );
+
 }

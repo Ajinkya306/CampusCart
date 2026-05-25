@@ -23,19 +23,26 @@ const productSchema =
 
     whatsapp: String,
 
-    sellerPhone: String,
+    sellerEmail: String,
 
     wishlistUsers: [String],
 
     createdAt: {
+
       type: Date,
+
       default: Date.now,
+
     },
 
   });
 
 module.exports =
+
   mongoose.model(
+
     "Product",
+
     productSchema
+
   );

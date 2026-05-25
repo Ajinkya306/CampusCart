@@ -29,7 +29,7 @@ export default function Wishlist() {
 
   useEffect(() => {
 
-    if (user) {
+    if (user?.email) {
 
       fetchWishlist();
 
@@ -44,10 +44,12 @@ export default function Wishlist() {
 
         const response =
           await axios.get(
-            `https://campuscart-5wbx.onrender.com/api/products/wishlist/user/${user.phoneNumber}`
+            `https://campuscart-5wbx.onrender.com/api/products/wishlist/user/${user.email}`
           );
 
-        setProducts(response.data);
+        setProducts(
+          response.data
+        );
 
       } catch (error) {
 
@@ -58,11 +60,13 @@ export default function Wishlist() {
         setLoading(false);
 
       }
+
     };
 
   if (!user) {
 
     return <Navigate to="/login" />;
+
   }
 
   return (
@@ -172,5 +176,7 @@ export default function Wishlist() {
       <Footer />
 
     </div>
+
   );
+
 }

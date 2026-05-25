@@ -29,13 +29,15 @@ export default function ProductCard({
   const { user } =
     useContext(AuthContext);
 
+  console.log(user);
+
   const navigate =
     useNavigate();
 
   const isWishlisted =
 
     product.wishlistUsers?.includes(
-      user?.phoneNumber
+      user?.email
     );
 
   const toggleWishlist =
@@ -52,12 +54,23 @@ export default function ProductCard({
 
       try {
 
-        await axios.put(
-          `https://campuscart-5wbx.onrender.com/api/products/wishlist/${product._id}`,
-          {
-            userPhone:
-              user.phoneNumber,
-          }
+        const response =
+
+          await axios.put(
+
+            `https://campuscart-5wbx.onrender.com/api/products/wishlist/${product._id}`,
+
+            {
+
+              userEmail:
+                user.email,
+
+            }
+
+          );
+
+        console.log(
+          response.data
         );
 
         toast.success(
@@ -67,6 +80,10 @@ export default function ProductCard({
       } catch (error) {
 
         console.log(error);
+
+        toast.error(
+          "Wishlist Failed"
+        );
 
       }
     };
@@ -83,8 +100,11 @@ export default function ProductCard({
     }
 
     window.open(
+
       `https://wa.me/91${product.whatsapp}`,
+
       "_blank"
+
     );
   };
 

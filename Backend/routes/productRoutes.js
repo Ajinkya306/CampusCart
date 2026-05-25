@@ -75,49 +75,57 @@ router.get(
   }
 );
 
-/* GET SINGLE PRODUCT */
-
-router.get(
-
-  "/:id",
-
-  async (req, res) => {
-
-    try {
-
-      const product =
-
-        await Product.findById(
-          req.params.id
-        );
-
-      res.json(product);
-
-    } catch (error) {
-
-      console.log(error);
-
-      res.status(500).json({
-        error:
-          "Product Not Found",
-      });
-
-    }
-
-  }
-);
-
 /* ADD PRODUCT */
 
 router.post(
 
   "/",
 
-  upload.array("images", 5),
+  (req, res, next) => {
+
+    upload.array("images", 5)(
+
+      req,
+
+      res,
+
+      function (err) {
+
+        if (err) {
+
+          console.log(
+            "MULTER ERROR:"
+          );
+
+          console.log(err);
+
+          return res.status(500).json({
+
+            error: err.message,
+
+          });
+
+        }
+
+        next();
+
+      }
+
+    );
+
+  },
 
   async (req, res) => {
 
     try {
+
+      console.log(
+        "FILES:"
+      );
+
+      console.log(
+        req.files
+      );
 
       const imageUrls =
 
@@ -131,7 +139,8 @@ router.post(
 
           ...req.body,
 
-          images: imageUrls,
+          images:
+            imageUrls,
 
         });
 
@@ -143,23 +152,30 @@ router.post(
 
     } catch (error) {
 
+      console.log(
+        "BACKEND ERROR:"
+      );
+
       console.log(error);
 
       res.status(500).json({
+
         error:
-          "Product Upload Failed",
+          error.message,
+
       });
 
     }
 
   }
+
 );
 
 /* GET USER PRODUCTS */
 
 router.get(
 
-  "/user/:phone",
+  "/user/:email",
 
   async (req, res) => {
 
@@ -170,7 +186,7 @@ router.get(
         await Product.find({
 
           sellerPhone:
-            req.params.phone,
+            req.params.email,
 
         }).sort({
           createdAt: -1,
@@ -208,35 +224,81 @@ router.put(
           req.params.id
         );
 
-      const userPhone =
-        req.body.userPhone;
+      if (!product) {
 
-      if (
+        return res.status(404).json({
+          error:
+            "Product not found",
+        });
 
-        product.wishlistUsers.includes(
-          userPhone
-        )
+      }
 
-      ) {
+      const userEmail =
+        req.body.userEmail;
+
+      console.log(
+        "USER EMAIL:",
+        userEmail
+      );
+
+      if (!userEmail) {
+
+        return res.status(400).json({
+          error:
+            "Email missing",
+        });
+
+      }
+
+      const cleanedWishlist =
+
+        (product.wishlistUsers || [])
+          .filter(Boolean);
+
+      const alreadyWishlisted =
+
+        cleanedWishlist.includes(
+          userEmail
+        );
+
+      if (alreadyWishlisted) {
 
         product.wishlistUsers =
 
-          product.wishlistUsers.filter(
-            (phone) =>
-              phone !== userPhone
+          cleanedWishlist.filter(
+            (email) =>
+              email !== userEmail
           );
 
       } else {
 
-        product.wishlistUsers.push(
-          userPhone
-        );
+        product.wishlistUsers = [
+
+          ...cleanedWishlist,
+
+          userEmail,
+
+        ];
 
       }
 
+      product.markModified(
+        "wishlistUsers"
+      );
+
       await product.save();
 
-      res.json(product);
+      const updatedProduct =
+
+        await Product.findById(
+          req.params.id
+        );
+
+      console.log(
+        updatedProduct.wishlistUsers
+      );
+
+      res.json(updatedProduct);
 
     } catch (error) {
 
@@ -244,7 +306,7 @@ router.put(
 
       res.status(500).json({
         error:
-          "Wishlist Update Failed",
+          "Wishlist Failed",
       });
 
     }
@@ -256,7 +318,7 @@ router.put(
 
 router.get(
 
-  "/wishlist/user/:phone",
+  "/wishlist/user/:email",
 
   async (req, res) => {
 
@@ -267,7 +329,7 @@ router.get(
         await Product.find({
 
           wishlistUsers:
-            req.params.phone,
+            req.params.email,
 
         }).sort({
           createdAt: -1,
@@ -282,39 +344,6 @@ router.get(
       res.status(500).json({
         error:
           "Failed To Fetch Wishlist",
-      });
-
-    }
-
-  }
-);
-
-/* DELETE PRODUCT */
-
-router.delete(
-
-  "/:id",
-
-  async (req, res) => {
-
-    try {
-
-      await Product.findByIdAndDelete(
-        req.params.id
-      );
-
-      res.json({
-        message:
-          "Product Deleted",
-      });
-
-    } catch (error) {
-
-      console.log(error);
-
-      res.status(500).json({
-        error:
-          "Delete Failed",
       });
 
     }
@@ -355,6 +384,72 @@ router.put(
       res.status(500).json({
         error:
           "Update Failed",
+      });
+
+    }
+
+  }
+);
+
+/* DELETE PRODUCT */
+
+router.delete(
+
+  "/:id",
+
+  async (req, res) => {
+
+    try {
+
+      await Product.findByIdAndDelete(
+        req.params.id
+      );
+
+      res.json({
+        message:
+          "Product Deleted",
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        error:
+          "Delete Failed",
+      });
+
+    }
+
+  }
+);
+
+/* GET SINGLE PRODUCT */
+/* KEEP THIS ROUTE LAST */
+
+router.get(
+
+  "/:id",
+
+  async (req, res) => {
+
+    try {
+
+      const product =
+
+        await Product.findById(
+          req.params.id
+        );
+
+      res.json(product);
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        error:
+          "Product Not Found",
       });
 
     }

@@ -47,7 +47,7 @@ export default function Profile() {
             <div className="w-28 h-28 rounded-full bg-gradient-to-r from-blue-700 to-purple-700 flex items-center justify-center text-white text-5xl font-black shadow-xl">
 
               {
-                user.phoneNumber
+                user.email
                 ?.slice(-2)
               }
 
@@ -59,7 +59,7 @@ export default function Profile() {
 
               <h1 className="text-4xl font-black text-gray-800">
 
-                Student Account
+                {user?.name || "Student"}
 
               </h1>
 
@@ -67,7 +67,7 @@ export default function Profile() {
 
                 <FaPhoneAlt />
 
-                {user.phoneNumber}
+                {user.email}
 
               </p>
 

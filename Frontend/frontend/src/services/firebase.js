@@ -1,5 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 
 // Import the functions you need from the SDKs you need
@@ -26,3 +29,5 @@ const analytics = getAnalytics(app);
 
 
 export const auth = getAuth(app);
+export const googleProvider =
+  new GoogleAuthProvider();
