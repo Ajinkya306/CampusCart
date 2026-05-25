@@ -9,15 +9,23 @@ import {
   Link,
 } from "react-router-dom";
 
-import axios from "axios";
-
 import {
   FaEye,
 } from "react-icons/fa";
 
 import QuickViewModal from "./QuickViewModal";
 
+/*
+
+REMOVED CODE
+
+import axios from "axios";
+
 import toast from "react-hot-toast";
+
+WISHLIST FEATURE REMOVED COMPLETELY
+
+*/
 
 export default function ProductCard({
   product,
@@ -29,10 +37,10 @@ export default function ProductCard({
   const { user } =
     useContext(AuthContext);
 
-  console.log(user);
-
   const navigate =
     useNavigate();
+
+  /* REMOVED WISHLIST LOGIC */
 
   // const isWishlisted =
 
@@ -97,6 +105,7 @@ export default function ProductCard({
       navigate("/login");
 
       return;
+
     }
 
     window.open(
@@ -106,6 +115,7 @@ export default function ProductCard({
       "_blank"
 
     );
+
   };
 
   return (
@@ -274,7 +284,9 @@ export default function ProductCard({
 
             </p>
 
-            {/* WISHLIST BUTTON
+            {/* REMOVED WISHLIST BUTTON */}
+
+            {/*
 
             <button
 
@@ -311,7 +323,9 @@ export default function ProductCard({
                 : "Save Product"
               }
 
-            </button> */}
+            </button>
+
+            */}
 
             {/* CONTACT BUTTON */}
 
@@ -368,4 +382,5 @@ export default function ProductCard({
     </>
 
   );
+
 }
