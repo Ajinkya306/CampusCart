@@ -185,11 +185,13 @@ router.get(
 
         await Product.find({
 
-          sellerPhone:
+          sellerEmail:
             req.params.email,
 
         }).sort({
+
           createdAt: -1,
+
         });
 
       res.json(products);
@@ -199,15 +201,17 @@ router.get(
       console.log(error);
 
       res.status(500).json({
+
         error:
           "Failed To Fetch User Products",
+
       });
 
     }
 
   }
-);
 
+);
 /* WISHLIST TOGGLE */
 
 router.put(
