@@ -18,10 +18,19 @@ import { signOut } from "firebase/auth";
 
 import { auth } from "../services/firebase";
 
+
+
+
+
 export default function Navbar() {
+
+  const { user } =
+  useContext(AuthContext);
 
   const [menuOpen, setMenuOpen] =
     useState(false);
+
+
 
   // const {
   //   user,
