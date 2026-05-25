@@ -23,11 +23,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] =
     useState(false);
 
-  const {
-    user,
-    darkMode,
-    toggleDarkMode,
-  } = useContext(AuthContext);
+  // const {
+  //   user,
+  //   darkMode,
+  //   toggleDarkMode,
+  // } = useContext(AuthContext);
 
   const handleLogout = async () => {
 
@@ -82,14 +82,14 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-4">
 
-          <button
+          {/* <button
             onClick={toggleDarkMode}
             className="bg-slate-200 text-black px-4 py-3 rounded-2xl hover:bg-slate-300 transition-all"
           >
 
             <FaMoon />
 
-          </button>
+          </button> */}
 
           {/* <Link
             to="/wishlist"

@@ -38,9 +38,9 @@ export default function AuthProvider({
 
     useState(true);
 
-  const [darkMode, setDarkMode] =
+  // const [darkMode, setDarkMode] =
 
-    useState(false);
+  //   useState(false);
 
   /* FIREBASE AUTH STATE */
 
