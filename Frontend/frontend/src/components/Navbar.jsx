@@ -91,14 +91,14 @@ export default function Navbar() {
 
           </button>
 
-          <Link
+          {/* <Link
             to="/wishlist"
             className="bg-slate-200 text-gray-800 px-5 py-3 rounded-2xl hover:bg-slate-300 transition-all"
           >
 
             Wishlist
 
-          </Link>
+          </Link> */}
 
           <Link
             to="/profile"
@@ -176,7 +176,7 @@ export default function Navbar() {
 
           <div className="md:hidden bg-white border-t px-6 py-6 flex flex-col gap-4 shadow-xl">
 
-            <button
+            {/* <button
               onClick={toggleDarkMode}
               className="bg-slate-200 text-black py-3 rounded-2xl"
             >
@@ -195,7 +195,7 @@ export default function Navbar() {
 
               Wishlist
 
-            </Link>
+            </Link> */}
 
             <Link
               to="/profile"

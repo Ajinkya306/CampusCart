@@ -34,59 +34,59 @@ export default function ProductCard({
   const navigate =
     useNavigate();
 
-  const isWishlisted =
+  // const isWishlisted =
 
-    product.wishlistUsers?.includes(
-      user?.email
-    );
+  //   product.wishlistUsers?.includes(
+  //     user?.email
+  //   );
 
-  const toggleWishlist =
-    async (e) => {
+  // const toggleWishlist =
+  //   async (e) => {
 
-      e.preventDefault();
+  //     e.preventDefault();
 
-      if (!user) {
+  //     if (!user) {
 
-        navigate("/login");
+  //       navigate("/login");
 
-        return;
-      }
+  //       return;
+  //     }
 
-      try {
+  //     try {
 
-        const response =
+  //       const response =
 
-          await axios.put(
+  //         await axios.put(
 
-            `https://campuscart-5wbx.onrender.com/api/products/wishlist/${product._id}`,
+  //           `https://campuscart-5wbx.onrender.com/api/products/wishlist/${product._id}`,
 
-            {
+  //           {
 
-              userEmail:
-              user.email,
+  //             userEmail:
+  //             user.email,
 
-            }
+  //           }
 
-          );
+  //         );
 
-        console.log(
-          response.data
-        );
+  //       console.log(
+  //         response.data
+  //       );
 
-        toast.success(
-          "Wishlist Updated"
-        );
+  //       toast.success(
+  //         "Wishlist Updated"
+  //       );
 
-      } catch (error) {
+  //     } catch (error) {
 
-        console.log(error);
+  //       console.log(error);
 
-        toast.error(
-          "Wishlist Failed"
-        );
+  //       toast.error(
+  //         "Wishlist Failed"
+  //       );
 
-      }
-    };
+  //     }
+  //   };
 
   const handleContact = (e) => {
 
@@ -274,7 +274,7 @@ export default function ProductCard({
 
             </p>
 
-            {/* WISHLIST BUTTON */}
+            {/* WISHLIST BUTTON
 
             <button
 
@@ -311,7 +311,7 @@ export default function ProductCard({
                 : "Save Product"
               }
 
-            </button>
+            </button> */}
 
             {/* CONTACT BUTTON */}
 

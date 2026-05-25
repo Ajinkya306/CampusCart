@@ -16,167 +16,167 @@ import {
   Navigate,
 } from "react-router-dom";
 
-export default function Wishlist() {
+// export default function Wishlist() {
 
-  const { user } =
-    useContext(AuthContext);
+//   const { user } =
+//     useContext(AuthContext);
 
-  const [products, setProducts] =
-    useState([]);
+//   const [products, setProducts] =
+//     useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+//   const [loading, setLoading] =
+//     useState(true);
 
-  useEffect(() => {
+//   useEffect(() => {
 
-    if (user?.email) {
+//     if (user?.email) {
 
-      fetchWishlist();
+//       fetchWishlist();
 
-    }
+//     }
 
-  }, [user]);
+//   }, [user]);
 
-  const fetchWishlist =
-    async () => {
+//   const fetchWishlist =
+//     async () => {
 
-      try {
+//       try {
 
-        const response =
-          await axios.get(
-            `https://campuscart-5wbx.onrender.com/api/products/wishlist/user/${user.email}`
-          );
+//         const response =
+//           await axios.get(
+//             `https://campuscart-5wbx.onrender.com/api/products/wishlist/user/${user.email}`
+//           );
 
-        setProducts(
-          response.data
-        );
+//         setProducts(
+//           response.data
+//         );
 
-      } catch (error) {
+//       } catch (error) {
 
-        console.log(error);
+//         console.log(error);
 
-      } finally {
+//       } finally {
 
-        setLoading(false);
+//         setLoading(false);
 
-      }
+//       }
 
-    };
+//     };
 
-  if (!user) {
+//   if (!user) {
 
-    return <Navigate to="/login" />;
+//     return <Navigate to="/login" />;
 
-  }
+//   }
 
-  return (
+//   return (
 
-    <div className="bg-slate-100 min-h-screen">
+//     <div className="bg-slate-100 min-h-screen">
 
-      <Navbar />
+//       <Navbar />
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+//       <section className="max-w-7xl mx-auto px-6 py-16">
 
-        <div className="flex items-center justify-between mb-10">
+//         <div className="flex items-center justify-between mb-10">
 
-          <h1 className="text-5xl font-black text-gray-800">
+//           <h1 className="text-5xl font-black text-gray-800">
 
-            Wishlist
+//             Wishlist
 
-          </h1>
+//           </h1>
 
-          <p className="text-gray-500 text-lg">
+//           <p className="text-gray-500 text-lg">
 
-            {
-              products.length
-            } Saved Products
+//             {
+//               products.length
+//             } Saved Products
 
-          </p>
+//           </p>
 
-        </div>
+//         </div>
 
-        {
-          loading ? (
+//         {
+//           loading ? (
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+//             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-              {
-                [...Array(6)].map(
-                  (_, index) => (
+//               {
+//                 [...Array(6)].map(
+//                   (_, index) => (
 
-                    <div
-                      key={index}
-                      className="bg-white rounded-3xl shadow-lg overflow-hidden animate-pulse"
-                    >
+//                     <div
+//                       key={index}
+//                       className="bg-white rounded-3xl shadow-lg overflow-hidden animate-pulse"
+//                     >
 
-                      <div className="h-60 bg-slate-300"></div>
+//                       <div className="h-60 bg-slate-300"></div>
 
-                      <div className="p-5">
+//                       <div className="p-5">
 
-                        <div className="h-6 bg-slate-300 rounded w-3/4"></div>
+//                         <div className="h-6 bg-slate-300 rounded w-3/4"></div>
 
-                        <div className="h-6 bg-slate-300 rounded w-1/2 mt-4"></div>
+//                         <div className="h-6 bg-slate-300 rounded w-1/2 mt-4"></div>
 
-                        <div className="h-4 bg-slate-300 rounded w-1/3 mt-4"></div>
+//                         <div className="h-4 bg-slate-300 rounded w-1/3 mt-4"></div>
 
-                        <div className="h-12 bg-slate-300 rounded-2xl mt-6"></div>
+//                         <div className="h-12 bg-slate-300 rounded-2xl mt-6"></div>
 
-                      </div>
+//                       </div>
 
-                    </div>
+//                     </div>
 
-                  )
-                )
-              }
+//                   )
+//                 )
+//               }
 
-            </div>
+//             </div>
 
-          ) : products.length === 0 ? (
+//           ) : products.length === 0 ? (
 
-            <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
+//             <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
 
-              <h2 className="text-3xl font-bold text-gray-700">
+//               <h2 className="text-3xl font-bold text-gray-700">
 
-                No Saved Products
+//                 No Saved Products
 
-              </h2>
+//               </h2>
 
-              <p className="text-gray-500 mt-4 text-lg">
+//               <p className="text-gray-500 mt-4 text-lg">
 
-                Save products to view them here later.
+//                 Save products to view them here later.
 
-              </p>
+//               </p>
 
-            </div>
+//             </div>
 
-          ) : (
+//           ) : (
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+//             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-              {
-                products.map(
-                  (product) => (
+//               {
+//                 products.map(
+//                   (product) => (
 
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                    />
+//                     <ProductCard
+//                       key={product._id}
+//                       product={product}
+//                     />
 
-                  )
-                )
-              }
+//                   )
+//                 )
+//               }
 
-            </div>
+//             </div>
 
-          )
-        }
+//           )
+//         }
 
-      </section>
+//       </section>
 
-      <Footer />
+//       <Footer />
 
-    </div>
+//     </div>
 
-  );
+//   );
 
-}
+// }

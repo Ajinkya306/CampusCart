@@ -115,7 +115,7 @@ export default function Profile() {
 
             {/* WISHLIST */}
 
-            <Link to="/wishlist">
+            {/* <Link to="/wishlist">
 
               <div className="bg-slate-100 rounded-3xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
 
@@ -139,7 +139,7 @@ export default function Profile() {
 
               </div>
 
-            </Link>
+            </Link> */}
 
             {/* PURCHASES */}
 

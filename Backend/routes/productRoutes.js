@@ -214,146 +214,146 @@ router.get(
 );
 /* WISHLIST TOGGLE */
 
-router.put(
+// router.put(
 
-  "/wishlist/:id",
+//   "/wishlist/:id",
 
-  async (req, res) => {
+//   async (req, res) => {
 
-    try {
+//     try {
 
-      const product =
+//       const product =
 
-        await Product.findById(
-          req.params.id
-        );
+//         await Product.findById(
+//           req.params.id
+//         );
 
-      if (!product) {
+//       if (!product) {
 
-        return res.status(404).json({
-          error:
-            "Product not found",
-        });
+//         return res.status(404).json({
+//           error:
+//             "Product not found",
+//         });
 
-      }
+//       }
 
-      const userEmail =
-        req.body.userEmail;
+//       const userEmail =
+//         req.body.userEmail;
 
-      console.log(
-        "USER EMAIL:",
-        userEmail
-      );
+//       console.log(
+//         "USER EMAIL:",
+//         userEmail
+//       );
 
-      if (!userEmail) {
+//       if (!userEmail) {
 
-        return res.status(400).json({
-          error:
-            "Email missing",
-        });
+//         return res.status(400).json({
+//           error:
+//             "Email missing",
+//         });
 
-      }
+//       }
 
-      const cleanedWishlist =
+//       const cleanedWishlist =
 
-        (product.wishlistUsers || [])
-          .filter(Boolean);
+//         (product.wishlistUsers || [])
+//           .filter(Boolean);
 
-      const alreadyWishlisted =
+//       const alreadyWishlisted =
 
-        cleanedWishlist.includes(
-          userEmail
-        );
+//         cleanedWishlist.includes(
+//           userEmail
+//         );
 
-      if (alreadyWishlisted) {
+//       if (alreadyWishlisted) {
 
-        product.wishlistUsers =
+//         product.wishlistUsers =
 
-          cleanedWishlist.filter(
-            (email) =>
-              email !== userEmail
-          );
+//           cleanedWishlist.filter(
+//             (email) =>
+//               email !== userEmail
+//           );
 
-      } else {
+//       } else {
 
-        product.wishlistUsers = [
+//         product.wishlistUsers = [
 
-          ...cleanedWishlist,
+//           ...cleanedWishlist,
 
-          userEmail,
+//           userEmail,
 
-        ];
+//         ];
 
-      }
+//       }
 
-      product.markModified(
-        "wishlistUsers"
-      );
+//       product.markModified(
+//         "wishlistUsers"
+//       );
 
-      await product.save();
+//       await product.save();
 
-      const updatedProduct =
+//       const updatedProduct =
 
-        await Product.findById(
-          req.params.id
-        );
+//         await Product.findById(
+//           req.params.id
+//         );
 
-      console.log(
-        updatedProduct.wishlistUsers
-      );
+//       console.log(
+//         updatedProduct.wishlistUsers
+//       );
 
-      res.json(updatedProduct);
+//       res.json(updatedProduct);
 
-    } catch (error) {
+//     } catch (error) {
 
-      console.log(error);
+//       console.log(error);
 
-      res.status(500).json({
-        error:
-          "Wishlist Failed",
-      });
+//       res.status(500).json({
+//         error:
+//           "Wishlist Failed",
+//       });
 
-    }
+//     }
 
-  }
-);
+//   }
+// );
 
 /* GET USER WISHLIST */
 
-router.get(
+// router.get(
 
-  "/wishlist/user/:email",
+//   "/wishlist/user/:email",
 
-  async (req, res) => {
+//   async (req, res) => {
 
-    try {
+//     try {
 
-      const products =
+//       const products =
 
-        await Product.find({
+//         await Product.find({
 
-          wishlistUsers:
-            req.params.email,
+//           wishlistUsers:
+//             req.params.email,
 
-        }).sort({
-          createdAt: -1,
-        });
+//         }).sort({
+//           createdAt: -1,
+//         });
 
-      res.json(products);
+//       res.json(products);
 
-    } catch (error) {
+//     } catch (error) {
 
-      console.log(error);
+//       console.log(error);
 
-      res.status(500).json({
-        error:
-          "Failed To Fetch Wishlist",
-      });
+//       res.status(500).json({
+//         error:
+//           "Failed To Fetch Wishlist",
+//       });
 
-    }
+//     }
 
-  }
-);
+//   }
+// );
 
 /* EDIT PRODUCT */
 

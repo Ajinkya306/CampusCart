@@ -43,10 +43,10 @@ function App() {
           element={<MyListings />}
         />
 
-        <Route
+        {/* <Route
           path="/wishlist"
           element={<Wishlist />}
-        />
+        /> */}
 
         <Route
           path="/edit-product/:id"
