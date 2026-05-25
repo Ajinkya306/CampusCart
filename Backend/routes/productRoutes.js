@@ -6,6 +6,9 @@ const Product = require("../models/Product");
 
 const upload = require("../middleware/upload");
 
+const mongoose =
+  require("mongoose");
+
 /* GET ALL PRODUCTS WITH PAGINATION */
 
 router.get(
@@ -460,5 +463,82 @@ router.get(
 
   }
 );
+
+
+/* WEBSITE STATS */
+
+router.get(
+
+  "/stats/all",
+
+  async (req, res) => {
+
+    try {
+
+      /* TOTAL PRODUCTS */
+
+      const totalProducts =
+
+        await Product.countDocuments();
+
+      /* UNIQUE COLLEGES */
+
+      const colleges =
+
+        await Product.distinct(
+          "college"
+        );
+
+      /* UNIQUE CITIES */
+
+      const cities =
+
+        await Product.distinct(
+          "city"
+        );
+
+      /* TOTAL USERS */
+
+      const usersCollection =
+
+        mongoose.connection.db.collection(
+          "Registrations"
+        );
+
+      const totalUsers =
+
+        await usersCollection.countDocuments();
+
+      res.json({
+
+        totalProducts,
+
+        totalUsers,
+
+        totalColleges:
+          colleges.length,
+
+        totalCities:
+          cities.length,
+
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+
+        error:
+          "Failed To Fetch Stats",
+
+      });
+
+    }
+
+  }
+
+);
+
 
 module.exports = router;

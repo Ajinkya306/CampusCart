@@ -3,7 +3,20 @@ import { motion } from "framer-motion";
 export default function Hero({
 
   search,
+
   setSearch,
+
+  stats = {
+
+    totalProducts: 0,
+
+    totalUsers: 0,
+
+    totalColleges: 0,
+
+    totalCities: 0,
+
+  },
 
 }) {
 
@@ -128,7 +141,7 @@ export default function Hero({
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
 
-              2K+
+              {stats.totalProducts}+
 
             </h2>
 
@@ -160,7 +173,7 @@ export default function Hero({
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
 
-              15K+
+              {stats.totalUsers}+
 
             </h2>
 
@@ -192,7 +205,7 @@ export default function Hero({
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
 
-              100+
+              {stats.totalColleges}+
 
             </h2>
 
@@ -224,7 +237,7 @@ export default function Hero({
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">
 
-              20+
+              {stats.totalCities}+
 
             </h2>
 
@@ -237,4 +250,5 @@ export default function Hero({
     </section>
 
   );
+
 }
