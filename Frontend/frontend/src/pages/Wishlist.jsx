@@ -16,6 +16,15 @@ import {
   Navigate,
 } from "react-router-dom";
 
+/*
+
+WISHLIST FEATURE REMOVED
+
+OLD CODE PRESERVED BELOW
+FOR FUTURE USE
+
+*/
+
 // export default function Wishlist() {
 
 //   const { user } =
@@ -180,3 +189,11 @@ import {
 //   );
 
 // }
+
+/* SAFE EMPTY COMPONENT */
+
+export default function Wishlist() {
+
+  return null;
+
+}
