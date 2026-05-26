@@ -132,41 +132,37 @@ router.post(
 
       const imageUrls =
 
-        req.files.map(
+        req.files?.map(
           (file) => file.path
-        );
+        ) || [];
+
+      /* NORMALIZE COLLEGE */
 
       const normalizeCollege =
         (college) => {
 
-          const lower =
+          return college
 
-            college
-              .toLowerCase()
-              .trim();
+            ?.toLowerCase()
 
-          /* COMMON ALIASES */
+            ?.replace(/[^a-zA-Z0-9 ]/g, "")
 
-          const aliases = {
+            ?.replace(/\s+/g, " ")
 
-            pict:
-              "pune institute of computer technology",
+            ?.trim();
 
-            mit:
-              "maharashtra institute of technology",
+        };
 
-            vit:
-              "vishwakarma institute of technology",
+      /* GENERATE SEARCHABLE COLLEGE */
 
-            coep:
-              "college of engineering pune",
+      const generateCollegeSearch =
+        (college) => {
 
-          };
+          const normalized =
 
-          return (
-            aliases[lower]
-            || lower
-          );
+            normalizeCollege(college);
+
+          return normalized;
 
         };
 
@@ -184,7 +180,17 @@ router.post(
               req.body.college
             ),
 
+          collegeSearch:
+
+            generateCollegeSearch(
+              req.body.college
+            ),
+
         });
+
+      /* VERY IMPORTANT */
+
+      await newProduct.save();
 
       res.status(201).json(
         newProduct
@@ -252,148 +258,6 @@ router.get(
   }
 
 );
-/* WISHLIST TOGGLE */
-
-// router.put(
-
-//   "/wishlist/:id",
-
-//   async (req, res) => {
-
-//     try {
-
-//       const product =
-
-//         await Product.findById(
-//           req.params.id
-//         );
-
-//       if (!product) {
-
-//         return res.status(404).json({
-//           error:
-//             "Product not found",
-//         });
-
-//       }
-
-//       const userEmail =
-//         req.body.userEmail;
-
-//       console.log(
-//         "USER EMAIL:",
-//         userEmail
-//       );
-
-//       if (!userEmail) {
-
-//         return res.status(400).json({
-//           error:
-//             "Email missing",
-//         });
-
-//       }
-
-//       const cleanedWishlist =
-
-//         (product.wishlistUsers || [])
-//           .filter(Boolean);
-
-//       const alreadyWishlisted =
-
-//         cleanedWishlist.includes(
-//           userEmail
-//         );
-
-//       if (alreadyWishlisted) {
-
-//         product.wishlistUsers =
-
-//           cleanedWishlist.filter(
-//             (email) =>
-//               email !== userEmail
-//           );
-
-//       } else {
-
-//         product.wishlistUsers = [
-
-//           ...cleanedWishlist,
-
-//           userEmail,
-
-//         ];
-
-//       }
-
-//       product.markModified(
-//         "wishlistUsers"
-//       );
-
-//       await product.save();
-
-//       const updatedProduct =
-
-//         await Product.findById(
-//           req.params.id
-//         );
-
-//       console.log(
-//         updatedProduct.wishlistUsers
-//       );
-
-//       res.json(updatedProduct);
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-//         error:
-//           "Wishlist Failed",
-//       });
-
-//     }
-
-//   }
-// );
-
-/* GET USER WISHLIST */
-
-// router.get(
-
-//   "/wishlist/user/:email",
-
-//   async (req, res) => {
-
-//     try {
-
-//       const products =
-
-//         await Product.find({
-
-//           wishlistUsers:
-//             req.params.email,
-
-//         }).sort({
-//           createdAt: -1,
-//         });
-
-//       res.json(products);
-
-//     } catch (error) {
-
-//       console.log(error);
-
-//       res.status(500).json({
-//         error:
-//           "Failed To Fetch Wishlist",
-//       });
-
-//     }
-
-//   }
-// );
 
 /* EDIT PRODUCT */
 
@@ -501,7 +365,6 @@ router.get(
   }
 );
 
-
 /* WEBSITE STATS */
 
 router.get(
@@ -534,7 +397,7 @@ router.get(
           "city"
         );
 
-      /* TOTAL USERS */
+      /* UNIQUE USERS */
 
       const totalUsers =
 
@@ -576,6 +439,5 @@ router.get(
   }
 
 );
-
 
 module.exports = router;

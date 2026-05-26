@@ -17,6 +17,8 @@ const productSchema =
 
     collegeNormalized: String,
 
+    collegeSearch: String,
+
     condition: String,
 
     type: String,
