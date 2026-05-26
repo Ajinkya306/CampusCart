@@ -56,7 +56,7 @@ export default function Hero({
 
         <p className="mt-6 text-lg sm:text-xl lg:text-2xl text-blue-100">
 
-          Everything Students Need
+          OLX for College Students
 
         </p>
 
@@ -242,6 +242,8 @@ export default function Hero({
             </h2>
 
           </div>
+          
+        
 
         </div>
 
