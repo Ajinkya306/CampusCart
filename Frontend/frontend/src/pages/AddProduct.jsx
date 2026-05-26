@@ -100,14 +100,11 @@ export default function AddProduct() {
         /* GOOGLE AUTH USER */
 
         data.append(
-
           "sellerEmail",
-
           user.email
-
         );
 
-        formData.append(
+        data.append(
           "sellerName",
           user.name
         );
@@ -235,9 +232,8 @@ export default function AddProduct() {
               )
             }
 
-          
           </select>
-          
+
           <input
 
             type="text"
