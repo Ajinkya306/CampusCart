@@ -1,26 +1,18 @@
 import { useEffect, useState } from "react";
-
 import { useParams } from "react-router-dom";
-
 import axios from "axios";
-
 import Navbar from "../components/Navbar";
-
-import { Helmet }
-from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
 export default function ProductDetails() {
 
   const { id } = useParams();
 
-  const [product, setProduct] =
-    useState(null);
+  const [product, setProduct] = useState(null);
 
-  const [selectedImage, setSelectedImage] =
-    useState("");
+  const [selectedImage, setSelectedImage] = useState("");
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
@@ -34,10 +26,9 @@ export default function ProductDetails() {
 
       setLoading(true);
 
-      const response =
-        await axios.get(
-          `https://campuscart-5wbx.onrender.com/api/products/${id}`
-        );
+      const response = await axios.get(
+        `https://campuscart-5wbx.onrender.com/api/products/${id}`
+      );
 
       setProduct(response.data);
 
@@ -178,10 +169,10 @@ export default function ProductDetails() {
 
               src={
                 selectedImage
-                ?.replace(
-                  "/upload/",
-                  "/upload/f_auto,q_auto,w_1000/"
-                )
+                  ?.replace(
+                    "/upload/",
+                    "/upload/f_auto,q_auto,w_1000/"
+                  )
               }
 
               alt={product.title}
@@ -238,8 +229,8 @@ export default function ProductDetails() {
                       flex-shrink-0
                       ${
                         selectedImage === image
-                        ? "border-blue-700"
-                        : "border-transparent"
+                          ? "border-blue-700"
+                          : "border-transparent"
                       }
                       `}
 
@@ -325,9 +316,6 @@ export default function ProductDetails() {
 
               </p>
 
-              
-
-
             </div>
 
             {/* DESCRIPTION */}
@@ -356,6 +344,8 @@ export default function ProductDetails() {
 
               target="_blank"
 
+              rel="noreferrer"
+
               className="
               block
               mt-10
@@ -379,6 +369,73 @@ export default function ProductDetails() {
               Contact Seller
 
             </a>
+
+            {/* SHARE + COPY */}
+
+            <div className="flex gap-4 mt-6">
+
+              {/* WHATSAPP SHARE */}
+
+              <a
+
+                href={`https://wa.me/?text=${encodeURIComponent(
+                  `Check out this product on CampusCart:\n${window.location.href}`
+                )}`}
+
+                target="_blank"
+
+                rel="noreferrer"
+
+                className="
+                flex-1
+                bg-green-500
+                hover:bg-green-600
+                text-white
+                py-4
+                rounded-2xl
+                text-center
+                font-semibold
+                transition-all
+                "
+
+              >
+
+                Share on WhatsApp
+
+              </a>
+
+              {/* COPY LINK */}
+
+              <button
+
+                onClick={() => {
+
+                  navigator.clipboard.writeText(
+                    window.location.href
+                  );
+
+                  alert("Product Link Copied");
+
+                }}
+
+                className="
+                flex-1
+                bg-blue-700
+                hover:bg-blue-800
+                text-white
+                py-4
+                rounded-2xl
+                font-semibold
+                transition-all
+                "
+
+              >
+
+                Copy Link
+
+              </button>
+
+            </div>
 
           </div>
 
