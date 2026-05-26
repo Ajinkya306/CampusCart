@@ -67,7 +67,7 @@ export default function EditProduct() {
       try {
 
         await axios.put(
-          `https://campuscart-5wbx.onrender.com/api/products/${id}`,
+          `https://campuscart-5wbx.onrender.com/api/products/edit/${id}`,
           formData
         );
 
