@@ -20,8 +20,7 @@ const helmet =
 
 
 
-const xss =
-  require("xss-clean");
+
 
 
 const errorHandler =
@@ -94,7 +93,7 @@ app.use(helmet());
 
 
 
-app.use(xss());
+
 
 app.use(limiter);
 
