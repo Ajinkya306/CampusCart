@@ -269,13 +269,61 @@ router.put(
 
     try {
 
+      /* NORMALIZE COLLEGE */
+
+      const normalizeCollege =
+        (college) => {
+
+          return college
+
+            ?.toLowerCase()
+
+            ?.replace(/[^a-zA-Z0-9 ]/g, "")
+
+            ?.replace(/\s+/g, " ")
+
+            ?.trim();
+
+        };
+
+      /* GENERATE SEARCHABLE COLLEGE */
+
+      const generateCollegeSearch =
+        (college) => {
+
+          const normalized =
+
+            normalizeCollege(college);
+
+          return normalized;
+
+        };
+
+      const updatedData = {
+
+        ...req.body,
+
+        collegeNormalized:
+
+          normalizeCollege(
+            req.body.college
+          ),
+
+        collegeSearch:
+
+          generateCollegeSearch(
+            req.body.college
+          ),
+
+      };
+
       const updatedProduct =
 
         await Product.findByIdAndUpdate(
 
           req.params.id,
 
-          req.body,
+          updatedData,
 
           {
             new: true,
@@ -290,13 +338,16 @@ router.put(
       console.log(error);
 
       res.status(500).json({
+
         error:
           "Update Failed",
+
       });
 
     }
 
   }
+
 );
 
 /* DELETE PRODUCT */
