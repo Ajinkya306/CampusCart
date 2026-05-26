@@ -172,6 +172,12 @@ router.post(
 
           ...req.body,
 
+          sellerName:
+            req.body.sellerName,
+
+          sellerEmail:
+            req.body.sellerEmail,
+
           images: imageUrls,
 
           collegeNormalized:

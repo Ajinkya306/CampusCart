@@ -29,6 +29,8 @@ const productSchema =
 
     sellerEmail: String,
 
+    sellerName: String,
+
     // wishlistUsers: [String],
 
     createdAt: {
