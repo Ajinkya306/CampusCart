@@ -15,6 +15,8 @@ const productSchema =
 
     college: String,
 
+    collegeNormalized: String,
+
     condition: String,
 
     type: String,

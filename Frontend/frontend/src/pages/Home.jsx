@@ -39,7 +39,7 @@ export default function Home() {
     useState("");
 
   const [debouncedSearch, setDebouncedSearch] =
-  useState("");
+    useState("");
 
   const [category, setCategory] =
     useState("");
@@ -53,6 +53,21 @@ export default function Home() {
   const [sort, setSort] =
     useState("");
 
+  /* NEW DYNAMIC STATS */
+
+  const [stats, setStats] =
+    useState({
+
+      totalProducts: 0,
+
+      totalUsers: 0,
+
+      totalColleges: 0,
+
+      totalCities: 0,
+
+    });
+
   /* INFINITE SCROLL */
 
   const [loadingMore, setLoadingMore] =
@@ -64,21 +79,54 @@ export default function Home() {
 
   }, [page]);
 
+  /* FETCH STATS */
+
   useEffect(() => {
 
-  const timer =
+    fetchStats();
 
-    setTimeout(() => {
+  }, []);
 
-      setDebouncedSearch(search);
+  useEffect(() => {
 
-    }, 400);
+    const timer =
 
-  return () =>
+      setTimeout(() => {
 
-    clearTimeout(timer);
+        setDebouncedSearch(search);
 
-}, [search]);
+      }, 400);
+
+    return () =>
+
+      clearTimeout(timer);
+
+  }, [search]);
+
+  const fetchStats =
+    async () => {
+
+      try {
+
+        const response =
+
+          await axios.get(
+
+            "https://campuscart-5wbx.onrender.com/api/products/stats/all"
+
+          );
+
+        setStats(
+          response.data
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    };
 
   const fetchProducts =
     async () => {
@@ -151,7 +199,7 @@ export default function Home() {
 
         debouncedSearch
           .trim()
-          .toLowerCase()
+          .toLowerCase();
 
       const matchesSearch =
 
@@ -173,7 +221,7 @@ export default function Home() {
 
         ||
 
-        product.college
+        product.collegeNormalized
           ?.toLowerCase()
           ?.includes(searchText)
 
@@ -197,13 +245,25 @@ export default function Home() {
 
         product.category === category;
 
+      /* IMPROVED COLLEGE SEARCH */
+
+      const searchCollege =
+
+        college
+          .toLowerCase()
+          .trim();
+
       const matchesCollege =
 
         product.college
           ?.toLowerCase()
-          ?.includes(
-            college.toLowerCase()
-          );
+          ?.includes(searchCollege)
+
+        ||
+
+        product.collegeSearch
+          ?.toLowerCase()
+          ?.includes(searchCollege);
 
       const matchesCondition =
 
@@ -308,7 +368,7 @@ export default function Home() {
   return (
 
     <div className="bg-slate-100 min-h-screen">
-      
+
       <Helmet>
 
         <title>
@@ -349,8 +409,13 @@ export default function Home() {
       <Navbar />
 
       <Hero
+
         search={search}
+
         setSearch={setSearch}
+
+        stats={stats}
+
       />
 
       <CategorySection
@@ -465,8 +530,6 @@ export default function Home() {
                 }
 
               </div>
-
-              {/* LOADING MORE */}
 
               {
                 loadingMore && (

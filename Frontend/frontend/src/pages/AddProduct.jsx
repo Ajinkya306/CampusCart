@@ -40,7 +40,7 @@ export default function AddProduct() {
 
       category: "",
 
-      city: "Pune",
+      city: "",
 
       college: "",
 
@@ -230,7 +230,33 @@ export default function AddProduct() {
               )
             }
 
+          
           </select>
+          
+          <input
+
+            type="text"
+
+            name="city"
+
+            placeholder="Enter City"
+
+            value={formData.city}
+
+            onChange={handleChange}
+
+            className="
+            w-full
+            border
+            border-slate-300
+            p-4
+            rounded-2xl
+            outline-none
+            "
+
+            required
+
+          />
 
           <input
             type="text"

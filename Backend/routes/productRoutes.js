@@ -136,18 +136,55 @@ router.post(
           (file) => file.path
         );
 
+      const normalizeCollege =
+        (college) => {
+
+          const lower =
+
+            college
+              .toLowerCase()
+              .trim();
+
+          /* COMMON ALIASES */
+
+          const aliases = {
+
+            pict:
+              "pune institute of computer technology",
+
+            mit:
+              "maharashtra institute of technology",
+
+            vit:
+              "vishwakarma institute of technology",
+
+            coep:
+              "college of engineering pune",
+
+          };
+
+          return (
+            aliases[lower]
+            || lower
+          );
+
+        };
+
       const newProduct =
 
         new Product({
 
           ...req.body,
 
-          images:
-            imageUrls,
+          images: imageUrls,
+
+          collegeNormalized:
+
+            normalizeCollege(
+              req.body.college
+            ),
 
         });
-
-      await newProduct.save();
 
       res.status(201).json(
         newProduct
@@ -499,21 +536,21 @@ router.get(
 
       /* TOTAL USERS */
 
-      const usersCollection =
-
-        mongoose.connection.db.collection(
-          "Registrations"
-        );
-
       const totalUsers =
 
-        await usersCollection.countDocuments();
+        await Product.distinct(
+          "sellerEmail"
+        );
+
+      const uniqueUsersCount =
+        totalUsers.length;
 
       res.json({
 
         totalProducts,
 
-        totalUsers,
+        totalUsers:
+          uniqueUsersCount,
 
         totalColleges:
           colleges.length,
