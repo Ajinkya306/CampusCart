@@ -232,10 +232,15 @@ router.post(
 
       const imageUrls =
 
-        req.files?.map(
-          (file) => file.path
-        ) || [];
+        Array.isArray(req.files)
 
+          ? req.files.map(
+              (file) => file.path
+            )
+
+          : [];
+
+          
       /* NORMALIZE COLLEGE */
 
       const normalizeCollege =
