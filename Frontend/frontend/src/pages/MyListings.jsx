@@ -39,7 +39,7 @@ export default function MyListings() {
             `https://campuscart-5wbx.onrender.com/api/products/user/${user.email}`
           );
 
-        setProducts(response.data);
+        setProducts(response.data.products);
 
       } catch (error) {
 

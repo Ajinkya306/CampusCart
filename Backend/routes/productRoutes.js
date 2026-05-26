@@ -10,7 +10,7 @@ const mongoose =
   require("mongoose");
 
 const auth =
-  require("../middleware/auth");  
+  require("../middleware/auth");
 
 /* GET ALL PRODUCTS WITH PAGINATION */
 
@@ -41,7 +41,7 @@ router.get(
         await Product.find()
 
           .sort({
-            createdAt: -1,
+            _id: -1,
           })
 
           .skip(skip)
@@ -294,8 +294,6 @@ router.post(
 
         });
 
-      /* VERY IMPORTANT */
-
       await newProduct.save();
 
       res.status(201).json(
@@ -342,7 +340,7 @@ router.get(
 
         }).sort({
 
-          createdAt: -1,
+          _id: -1,
 
         });
 
@@ -570,6 +568,70 @@ router.delete(
 
 );
 
+/* WEBSITE STATS */
+
+router.get(
+
+  "/stats/all",
+
+  async (req, res) => {
+
+    try {
+
+      const totalProducts =
+
+        await Product.countDocuments();
+
+      const colleges =
+
+        await Product.distinct(
+          "college"
+        );
+
+      const cities =
+
+        await Product.distinct(
+          "city"
+        );
+
+      const totalUsers =
+
+        await Product.distinct(
+          "sellerEmail"
+        );
+
+      res.json({
+
+        totalProducts,
+
+        totalUsers:
+          totalUsers.length,
+
+        totalColleges:
+          colleges.length,
+
+        totalCities:
+          cities.length,
+
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+
+        error:
+          "Failed To Fetch Stats",
+
+      });
+
+    }
+
+  }
+
+);
+
 /* GET SINGLE PRODUCT */
 /* KEEP THIS ROUTE LAST */
 
@@ -594,81 +656,9 @@ router.get(
       console.log(error);
 
       res.status(500).json({
+
         error:
           "Product Not Found",
-      });
-
-    }
-
-  }
-);
-
-/* WEBSITE STATS */
-
-router.get(
-
-  "/stats/all",
-
-  async (req, res) => {
-
-    try {
-
-      /* TOTAL PRODUCTS */
-
-      const totalProducts =
-
-        await Product.countDocuments();
-
-      /* UNIQUE COLLEGES */
-
-      const colleges =
-
-        await Product.distinct(
-          "college"
-        );
-
-      /* UNIQUE CITIES */
-
-      const cities =
-
-        await Product.distinct(
-          "city"
-        );
-
-      /* UNIQUE USERS */
-
-      const totalUsers =
-
-        await Product.distinct(
-          "sellerEmail"
-        );
-
-      const uniqueUsersCount =
-        totalUsers.length;
-
-      res.json({
-
-        totalProducts,
-
-        totalUsers:
-          uniqueUsersCount,
-
-        totalColleges:
-          colleges.length,
-
-        totalCities:
-          cities.length,
-
-      });
-
-    } catch (error) {
-
-      console.log(error);
-
-      res.status(500).json({
-
-        error:
-          "Failed To Fetch Stats",
 
       });
 
