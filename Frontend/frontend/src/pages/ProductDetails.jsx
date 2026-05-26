@@ -325,25 +325,7 @@ export default function ProductDetails() {
 
               </p>
 
-              <p className="text-2xl text-gray-700 mt-4">
-
-                <span className="font-bold">
-
-                  Seller:
-
-                </span>
-
-                {
-
-                  product.sellerName
-
-                  ||
-
-                  "CampusCart User"
-
-                }
-
-              </p>
+              
 
 
             </div>
