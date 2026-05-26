@@ -9,6 +9,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
+import authHeader from "../services/authHeader";
 
 export default function EditProduct() {
 
@@ -67,10 +68,24 @@ export default function EditProduct() {
       try {
 
         await axios.put(
-          `https://campuscart-5wbx.onrender.com/api/products/edit/${id}`,
-          formData
-        );
 
+          `https://campuscart-5wbx.onrender.com/api/products/edit/${id}`,
+
+          {
+
+            ...formData,
+
+            sellerEmail:
+              user.email,
+
+          },
+
+          authHeader() 
+
+        );
+        
+
+        
         toast.success(
           "Product Updated"
         );

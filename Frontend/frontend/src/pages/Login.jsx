@@ -13,6 +13,8 @@ import {
 
 import toast from "react-hot-toast";
 
+import axios from "axios";
+
 export default function Login() {
 
   const navigate =
@@ -37,6 +39,29 @@ export default function Login() {
         
         const user =
           result.user;
+
+        const response =
+
+          await axios.post(
+
+            "https://campuscart-5wbx.onrender.com/api/auth/token",
+
+            {
+
+              email:
+                user.email,
+
+            }
+
+          );
+
+        localStorage.setItem(
+
+          "campusToken",
+
+          response.data.token
+
+        );
 
         localStorage.setItem(
 

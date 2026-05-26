@@ -15,6 +15,9 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import authHeader
+from "../services/authHeader";
+
 export default function AddProduct() {
 
   const { user } =
@@ -131,6 +134,8 @@ export default function AddProduct() {
           {
 
             headers: {
+
+              ...authHeader().headers,
 
               "Content-Type":
                 "multipart/form-data",
@@ -349,12 +354,46 @@ export default function AddProduct() {
           }
 
           <input
-            type="text"
+
+            type="tel"
+
             name="whatsapp"
+
             placeholder="WhatsApp Number"
-            onChange={handleChange}
-            className="w-full border border-slate-300 p-4 rounded-2xl bg-white text-black"
+
+            value={formData.whatsapp}
+
+            onChange={(e) => {
+
+              const numbersOnly =
+
+                e.target.value
+                  .replace(/\D/g, "")
+                  .slice(0, 10);
+
+              setFormData({
+
+                ...formData,
+
+                whatsapp:
+                  numbersOnly,
+
+              });
+
+            }}
+
+            className="
+            w-full
+            border
+            border-slate-300
+            p-4
+            rounded-2xl
+            bg-white
+            text-black
+            "
+
             required
+
           />
 
           <button

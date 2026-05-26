@@ -9,6 +9,9 @@ const upload = require("../middleware/upload");
 const mongoose =
   require("mongoose");
 
+const auth =
+  require("../middleware/auth");  
+
 /* GET ALL PRODUCTS WITH PAGINATION */
 
 router.get(
@@ -84,6 +87,8 @@ router.post(
 
   "/",
 
+  auth,
+
   (req, res, next) => {
 
     upload.array("images", 5)(
@@ -129,6 +134,101 @@ router.post(
       console.log(
         req.files
       );
+
+      /* PHONE VALIDATION */
+
+      if (
+
+        !/^[0-9]{10}$/.test(
+          req.body.whatsapp
+        )
+
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Invalid WhatsApp Number",
+
+        });
+
+      }
+
+      /* TITLE VALIDATION */
+
+      if (
+
+        !req.body.title ||
+
+        req.body.title.trim().length < 3
+
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Title Too Short",
+
+        });
+
+      }
+
+      /* PRICE VALIDATION */
+
+      if (
+
+        !req.body.price ||
+
+        Number(req.body.price) <= 0
+
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Invalid Price",
+
+        });
+
+      }
+
+      /* DESCRIPTION VALIDATION */
+
+      if (
+
+        !req.body.description ||
+
+        req.body.description.trim().length < 5
+
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Description Too Short",
+
+        });
+
+      }
+
+      /* IMAGE VALIDATION */
+
+      if (
+
+        !req.files ||
+
+        req.files.length === 0
+
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "At Least One Image Required",
+
+        });
+
+      }
 
       const imageUrls =
 
@@ -271,6 +371,8 @@ router.put(
 
   "/edit/:id",
 
+  auth,
+
   async (req, res) => {
 
     try {
@@ -304,6 +406,42 @@ router.put(
           return normalized;
 
         };
+
+      const existingProduct =
+
+        await Product.findById(
+          req.params.id
+        );
+
+      if (!existingProduct) {
+
+        return res.status(404).json({
+
+          error:
+            "Product Not Found",
+
+        });
+
+      }
+
+      /* OWNERSHIP CHECK */
+
+      if (
+
+        existingProduct.sellerEmail !==
+
+        req.body.sellerEmail
+
+      ) {
+
+        return res.status(403).json({
+
+          error:
+            "Unauthorized",
+
+        });
+
+      }
 
       const updatedData = {
 
@@ -362,17 +500,57 @@ router.delete(
 
   "/:id",
 
+  auth,
+
   async (req, res) => {
 
     try {
+
+      const product =
+
+        await Product.findById(
+          req.params.id
+        );
+
+      if (!product) {
+
+        return res.status(404).json({
+
+          error:
+            "Product Not Found",
+
+        });
+
+      }
+
+      /* OWNERSHIP CHECK */
+
+      if (
+
+        product.sellerEmail !==
+
+        req.body.sellerEmail
+
+      ) {
+
+        return res.status(403).json({
+
+          error:
+            "Unauthorized",
+
+        });
+
+      }
 
       await Product.findByIdAndDelete(
         req.params.id
       );
 
       res.json({
+
         message:
           "Product Deleted",
+
       });
 
     } catch (error) {
@@ -380,13 +558,16 @@ router.delete(
       console.log(error);
 
       res.status(500).json({
+
         error:
           "Delete Failed",
+
       });
 
     }
 
   }
+
 );
 
 /* GET SINGLE PRODUCT */

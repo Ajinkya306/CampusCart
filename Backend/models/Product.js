@@ -41,7 +41,59 @@ const productSchema =
 
     },
 
-  });
+  },
+
+  {
+
+    timestamps: true,
+
+  }
+
+);
+
+/* DATABASE INDEXES */
+
+productSchema.index({
+
+  title: "text",
+
+  description: "text",
+
+  college: "text",
+
+  city: "text",
+
+});
+
+productSchema.index({
+
+  category: 1,
+
+});
+
+productSchema.index({
+
+  collegeNormalized: 1,
+
+});
+
+productSchema.index({
+
+  city: 1,
+
+});
+
+productSchema.index({
+
+  sellerEmail: 1,
+
+});
+
+productSchema.index({
+
+  createdAt: -1,
+
+});
 
 module.exports =
 

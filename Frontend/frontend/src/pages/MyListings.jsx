@@ -6,6 +6,9 @@ import { Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import authHeader
+from "../services/authHeader";
+
 
 export default function MyListings() {
 
@@ -64,7 +67,22 @@ export default function MyListings() {
         setDeletingId(id);
 
         await axios.delete(
-          `https://campuscart-5wbx.onrender.com/api/products/${id}`
+
+          `https://campuscart-5wbx.onrender.com/api/products/${id}`,
+
+          {
+
+            ...authHeader(),
+
+            data: {
+
+              sellerEmail:
+                user.email,
+
+            },
+
+          }
+
         );
 
         fetchMyProducts();
