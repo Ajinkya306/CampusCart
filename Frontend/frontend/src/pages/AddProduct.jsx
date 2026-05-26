@@ -107,6 +107,11 @@ export default function AddProduct() {
 
         );
 
+        formData.append(
+          "sellerName",
+          user.name
+        );
+
         for (
           let i = 0;
           i < images.length;
