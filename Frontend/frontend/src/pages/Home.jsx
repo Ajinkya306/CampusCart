@@ -247,13 +247,17 @@ export default function Home() {
 
       /* IMPROVED COLLEGE SEARCH */
 
-      const searchCollege =
+        const searchCollege =
 
         college
           .toLowerCase()
           .trim();
 
-      const matchesCollege =
+        const matchesCollege =
+
+        searchCollege === ""
+
+        ||
 
         product.college
           ?.toLowerCase()
