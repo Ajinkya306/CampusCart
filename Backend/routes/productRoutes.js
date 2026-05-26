@@ -87,7 +87,7 @@ router.post(
 
   "/",
 
-  auth,
+  
 
   (req, res, next) => {
 
@@ -369,7 +369,7 @@ router.put(
 
   "/edit/:id",
 
-  auth,
+  
 
   async (req, res) => {
 
@@ -498,7 +498,7 @@ router.delete(
 
   "/:id",
 
-  auth,
+  
 
   async (req, res) => {
 
