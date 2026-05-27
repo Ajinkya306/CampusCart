@@ -15,9 +15,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import authHeader
-from "../services/authHeader";
-
 export default function AddProduct() {
 
   const { user } =
@@ -82,6 +79,10 @@ export default function AddProduct() {
 
       e.preventDefault();
 
+      console.log(
+        "FORM SUBMIT HIT"
+      );
+
       setLoading(true);
 
       try {
@@ -109,7 +110,7 @@ export default function AddProduct() {
 
         data.append(
           "sellerName",
-          user.name
+          user.displayName
         );
 
         for (
@@ -125,26 +126,45 @@ export default function AddProduct() {
 
         }
 
-        await axios.post(
-
-          "https://campuscart-5wbx.onrender.com/api/products",
-
-          data,
-
-          {
-
-            headers: {
-
-              ...authHeader().headers,
-
-              "Content-Type":
-                "multipart/form-data",
-
-            },
-
-          }
-
+        console.log(
+          "FORM DATA:"
         );
+
+        for (
+          let pair
+          of data.entries()
+        ) {
+
+          console.log(pair);
+
+        }
+
+        const response =
+
+          await axios.post(
+
+            "https://campuscart-5wbx.onrender.com/api/products",
+
+            data,
+
+            {
+
+              headers: {
+
+                "Content-Type":
+                  "multipart/form-data",
+
+              },
+
+            }
+
+          );
+
+        console.log(
+          "UPLOAD SUCCESS"
+        );
+
+        console.log(response);
 
         toast.success(
           "Product Uploaded Successfully"
@@ -154,7 +174,15 @@ export default function AddProduct() {
 
       } catch (error) {
 
+        console.log(
+          "UPLOAD FRONTEND ERROR:"
+        );
+
         console.log(error);
+
+        console.log(
+          error.response
+        );
 
         toast.error(
           "Upload Failed"
