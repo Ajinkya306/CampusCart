@@ -4,6 +4,10 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+console.log(
+  process.env.CLOUD_API_KEY
+);
+
 const productRoutes = require("./routes/productRoutes");
 
 const rateLimit =

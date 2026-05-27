@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { Navigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
-import authHeader
-from "../services/authHeader";
 
+import axios from "axios";
+
+import { useContext } from "react";
+
+import { AuthContext } from "../context/AuthContext";
+
+import { Navigate } from "react-router-dom";
+
+import Navbar from "../components/Navbar";
+
+import { Link } from "react-router-dom";
+
+import toast from "react-hot-toast";
 
 export default function MyListings() {
 
@@ -22,11 +26,15 @@ export default function MyListings() {
     useState(null);
 
   if (!user) {
+
     return <Navigate to="/login" />;
+
   }
 
   useEffect(() => {
+
     fetchMyProducts();
+
   }, []);
 
   const fetchMyProducts =
@@ -35,17 +43,25 @@ export default function MyListings() {
       try {
 
         const response =
+
           await axios.get(
+
             `https://campuscart-5wbx.onrender.com/api/products/user/${user.email}`
+
           );
 
-        setProducts(response.data.products);
+        setProducts(
+
+          response.data || []
+
+        );
 
       } catch (error) {
 
         console.log(error);
 
       }
+
     };
 
   const deleteProduct =
@@ -71,8 +87,6 @@ export default function MyListings() {
           `https://campuscart-5wbx.onrender.com/api/products/${id}`,
 
           {
-
-            ...authHeader(),
 
             data: {
 
@@ -104,6 +118,7 @@ export default function MyListings() {
         setDeletingId(null);
 
       }
+
     };
 
   return (
@@ -115,7 +130,9 @@ export default function MyListings() {
       <div className="max-w-7xl mx-auto px-6 py-16">
 
         <h1 className="text-5xl font-bold text-gray-800 mb-12">
+
           My Listings
+
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -210,5 +227,7 @@ export default function MyListings() {
       </div>
 
     </div>
+
   );
+
 }
