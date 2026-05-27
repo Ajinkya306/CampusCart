@@ -11,7 +11,15 @@ import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
 import authHeader from "../services/authHeader";
 
+
+import { useContext } from "react";
+
+import { AuthContext }
+from "../context/AuthContext";
+
 export default function EditProduct() {
+
+  const { user } = useContext(AuthContext);
 
   const { id } = useParams();
 
