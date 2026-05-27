@@ -22,6 +22,8 @@ router.get(
 
     try {
 
+      console.log("upload error hit");
+
       const page =
 
         parseInt(req.query.page)
@@ -240,7 +242,7 @@ router.post(
 
           : [];
 
-          
+
       /* NORMALIZE COLLEGE */
 
       const normalizeCollege =
