@@ -12,6 +12,13 @@ const mongoose =
 const auth =
   require("../middleware/auth");
 
+
+const User =
+  require("../models/user");
+
+
+
+
 /* GET ALL PRODUCTS WITH PAGINATION */
 
 router.get(
@@ -603,16 +610,14 @@ router.get(
 
       const totalUsers =
 
-        await Product.distinct(
-          "sellerEmail"
-        );
+        await User.countDocuments();
 
       res.json({
 
         totalProducts,
 
         totalUsers:
-          totalUsers.length,
+          totalUsers,
 
         totalColleges:
           colleges.length,

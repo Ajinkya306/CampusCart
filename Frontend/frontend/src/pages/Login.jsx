@@ -1,3 +1,4 @@
+
 import {
   signInWithPopup,
 } from "firebase/auth";
@@ -30,16 +31,17 @@ export default function Login() {
         const result =
 
           await signInWithPopup(
-            
+
             auth,
             googleProvider
           );
-        
+
         console.log(result.user);
-        
+
         const user =
           result.user;
 
+        // Generate JWT Token
         const response =
 
           await axios.post(
@@ -54,6 +56,48 @@ export default function Login() {
             }
 
           );
+
+
+        await axios.post(
+
+          "https://campuscart-5wbx.onrender.com/api/users/register",
+
+          {
+
+            name:
+              user.displayName,
+
+            email:
+              user.email,
+
+            photo:
+              user.photoURL,
+
+          }
+
+        );
+
+
+
+        // Save user if not already exists
+        // await axios.post(
+
+        //   "https://campuscart-5wbx.onrender.com/api/auth/google-login",
+
+        //   {
+
+        //     name:
+        //       user.displayName,
+
+        //     email:
+        //       user.email,
+
+        //     photo:
+        //       user.photoURL,
+
+        //   }
+
+        // );
 
         localStorage.setItem(
 
@@ -159,3 +203,4 @@ export default function Login() {
   );
 
 }
+

@@ -10,6 +10,8 @@ import {
 
 import { auth } from "../services/firebase";
 
+import axios from "axios";
+
 export const AuthContext =
   createContext();
 
@@ -43,9 +45,32 @@ export default function AuthProvider({
     const unsubscribe =
       onAuthStateChanged(
         auth,
-        (currentUser) => {
+        async (currentUser) => {
 
           setUser(currentUser);
+
+          if (currentUser) {
+
+            // await axios.post(
+
+            //   "https://campuscart-5wbx.onrender.com/api/auth/google-login",
+
+            //   {
+
+            //     name:
+            //       currentUser.displayName,
+
+            //     email:
+            //       currentUser.email,
+
+            //     photo:
+            //       currentUser.photoURL,
+
+            //   }
+
+            // );
+
+          }
 
           setLoading(false);
 

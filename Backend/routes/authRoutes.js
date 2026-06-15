@@ -7,6 +7,11 @@ const jwt =
 const router =
   express.Router();
 
+const User =
+  require("../models/user");
+
+/* JWT TOKEN */
+
 router.post(
 
   "/token",
@@ -52,6 +57,73 @@ router.post(
   }
 
 );
+
+/* SAVE GOOGLE USER */
+
+// router.post(
+
+//   "/google-login",
+
+//   async (req, res) => {
+
+//     try {
+
+//       const {
+
+//         name,
+
+//         email,
+
+//         photo,
+
+//       } = req.body;
+
+//       let existingUser =
+
+//         await User.findOne({
+
+//           email,
+
+//         });
+
+//       if (!existingUser) {
+
+//         existingUser =
+
+//           await User.create({
+
+//             name,
+
+//             email,
+
+//             photo,
+
+//           });
+
+//       }
+
+//       res.json({
+
+//         success: true,
+
+//       });
+
+//     } catch (error) {
+
+//       console.log(error);
+
+//       res.status(500).json({
+
+//         error:
+//           "Google Login Failed",
+
+//       });
+
+//     }
+
+//   }
+
+// );
 
 module.exports =
   router;
