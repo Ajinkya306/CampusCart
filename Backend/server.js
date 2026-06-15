@@ -69,6 +69,8 @@ app.use(
 
       "https://campus-cart-pi.vercel.app",
 
+      "https://campus-cart-git-student-count-feature-ajinkya-s-projects3.vercel.app",
+
       "http://localhost:5173",
 
     ],
