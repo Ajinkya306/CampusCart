@@ -144,6 +144,9 @@ router.post(
         req.files
       );
 
+      console.log("BODY:");
+      console.log(req.body);
+
       /* PHONE VALIDATION */
 
       if (
@@ -153,6 +156,8 @@ router.post(
         )
 
       ) {
+
+        console.log("❌ Invalid WhatsApp Number:", req.body.whatsapp);
 
         return res.status(400).json({
 
@@ -172,6 +177,7 @@ router.post(
         req.body.title.trim().length < 3
 
       ) {
+        console.log("❌ Title Too Short:", req.body.whatsapp);
 
         return res.status(400).json({
 
@@ -191,6 +197,7 @@ router.post(
         Number(req.body.price) <= 0
 
       ) {
+        console.log("❌ Invalid Price:", req.body.whatsapp);
 
         return res.status(400).json({
 
@@ -210,6 +217,7 @@ router.post(
         req.body.description.trim().length < 5
 
       ) {
+        console.log("❌ Descpition Too Short:", req.body.whatsapp);
 
         return res.status(400).json({
 
@@ -229,6 +237,7 @@ router.post(
         req.files.length === 0
 
       ) {
+        console.log("❌ Atleast one image is required:", req.body.whatsapp);
 
         return res.status(400).json({
 
