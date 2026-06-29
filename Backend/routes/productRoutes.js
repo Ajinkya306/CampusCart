@@ -114,15 +114,35 @@ router.post(
 
         if (err) {
 
-          console.log(
-            "MULTER ERROR:"
-          );
-
+          console.log("MULTER ERROR:");
           console.log(err);
+
+          if (err.code === "LIMIT_FILE_SIZE") {
+
+            return res.status(400).json({
+
+              error:
+                "Each image must be smaller than 5 MB.",
+
+            });
+
+          }
+
+          if (err.code === "LIMIT_UNEXPECTED_FILE") {
+
+            return res.status(400).json({
+
+              error:
+                "You can upload a maximum of 5 images.",
+
+            });
+
+          }
 
           return res.status(500).json({
 
-            error: err.message,
+            error:
+              "Image upload failed. Please try again.",
 
           });
 
@@ -583,13 +603,26 @@ router.delete(
 
             const publicId = imageUrl
 
-              .split("/upload/")[1]
+            .split("/upload/")[1]
 
-              .split(".")[0];
+            .replace(/^v\d+\//, "")
+
+            .replace(/\.[^/.]+$/, "");
+
+          console.log("Image URL:", imageUrl);
+
+          console.log("Public ID:", publicId);
+
+          const result =
 
             await cloudinary.uploader.destroy(
               publicId
             );
+
+          console.log(
+            "Cloudinary Result:",
+            result
+          );
 
           } catch (err) {
 

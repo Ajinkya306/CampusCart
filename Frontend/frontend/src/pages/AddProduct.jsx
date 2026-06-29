@@ -180,12 +180,12 @@ export default function AddProduct() {
 
         console.log(error);
 
-        console.log(
-          error.response
-        );
-
         toast.error(
-          "Upload Failed"
+
+          error.response?.data?.error ||
+
+          "Something went wrong while uploading."
+
         );
 
       }
