@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import axios from "axios";
 
@@ -57,7 +57,7 @@ export default function Home() {
 
   const [stats, setStats] =
     useState({
-
+      
       totalProducts: 0,
 
       totalUsers: 0,
@@ -67,6 +67,8 @@ export default function Home() {
       totalCities: 0,
 
     });
+
+  const productsSectionRef = useRef(null);
 
   /* INFINITE SCROLL */
 
@@ -102,6 +104,42 @@ export default function Home() {
       clearTimeout(timer);
 
   }, [search]);
+
+
+  useEffect(() => {
+
+  if (
+    search ||
+    category ||
+    college ||
+    condition
+  ) {
+
+    setTimeout(() => {
+
+      productsSectionRef.current?.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start",
+
+      });
+
+    }, 150);
+
+  }
+
+}, [
+
+  debouncedSearch,
+
+  category,
+
+  college,
+
+  condition,
+
+]);
 
   const fetchStats =
     async () => {
@@ -447,13 +485,31 @@ export default function Home() {
 
       />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+      <section
+
+        ref={productsSectionRef}
+
+        className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16"
+
+        >
 
         <div className="flex items-center justify-between mb-6 sm:mb-10">
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 sm:mb-10">
 
-            Recently Added
+            {
+
+              search
+
+                ? `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""} for "${search}"`
+
+                : category
+
+                ? `Showing ${category} Products`
+
+                : "Recently Added"
+
+            }
 
           </h2>
 

@@ -6,6 +6,10 @@ const Product = require("../models/Product");
 
 const upload = require("../middleware/upload");
 
+const {
+  cloudinary,
+} = require("../config/cloudinary");
+
 const mongoose =
   require("mongoose");
 
@@ -563,13 +567,58 @@ router.delete(
 
       }
 
+      /* DELETE IMAGES FROM CLOUDINARY */
+
+      if (
+
+        product.images &&
+
+        product.images.length > 0
+
+      ) {
+
+        for (const imageUrl of product.images) {
+
+          try {
+
+            const publicId = imageUrl
+
+              .split("/upload/")[1]
+
+              .split(".")[0];
+
+            await cloudinary.uploader.destroy(
+              publicId
+            );
+
+          } catch (err) {
+
+            console.log(
+
+              "Cloudinary Delete Failed:",
+
+              err.message
+
+            );
+
+          }
+
+        }
+
+      }
+
+      /* DELETE PRODUCT FROM DATABASE */
+
       await Product.findByIdAndDelete(
+
         req.params.id
+
       );
 
       res.json({
 
         message:
+
           "Product Deleted",
 
       });
