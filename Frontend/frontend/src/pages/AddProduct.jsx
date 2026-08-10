@@ -174,17 +174,19 @@ export default function AddProduct() {
 
       } catch (error) {
 
-        console.log(
-          "UPLOAD FRONTEND ERROR:"
-        );
-
+        console.log("UPLOAD FRONTEND ERROR:");
         console.log(error);
+
+        console.log("Response:", error.response);
+        console.log("Response Data:", error.response?.data);
 
         toast.error(
 
           error.response?.data?.error ||
 
-          "Something went wrong while uploading."
+          error.message ||
+
+          "Upload Failed"
 
         );
 

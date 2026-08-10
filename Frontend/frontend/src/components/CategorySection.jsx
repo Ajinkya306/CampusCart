@@ -73,48 +73,158 @@ export default function CategorySection({
 
   return (
 
-    <section className="max-w-7xl mx-auto px-6 py-14">
+    <section className="max-w-7xl mx-auto px-6 py-16">
 
-      <h2 className="text-4xl font-bold text-gray-800 mb-10">
+      <div className="text-center mb-12">
 
-        Browse Categories
+        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800">
 
-      </h2>
+          Browse Categories
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        </h2>
+
+        <p className="text-gray-500 mt-4 text-lg">
+
+          Choose a category to quickly explore products.
+
+        </p>
+
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
 
         {
+
           categoryData.map(
+
             (item, index) => (
 
               <div
+
                 key={index}
+
                 onClick={() =>
+
                   setCategory(item.name)
+
                 }
-                className="bg-white rounded-3xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 cursor-pointer"
+
+                className="
+
+                  group
+
+                  bg-gradient-to-br
+
+                  from-blue-600
+
+                  to-indigo-700
+
+                  rounded-3xl
+
+                  p-8
+
+                  shadow-lg
+
+                  hover:shadow-2xl
+
+                  hover:-translate-y-2
+
+                  hover:scale-105
+
+                  transition-all
+
+                  duration-300
+
+                  cursor-pointer
+
+                  text-center
+
+                "
+
               >
 
-                <div className="text-5xl text-blue-700">
+                <div
+
+                  className="
+
+                    text-6xl
+
+                    text-white
+
+                    mb-6
+
+                    flex
+
+                    justify-center
+
+                    transition-transform
+
+                    duration-300
+
+                    group-hover:scale-110
+
+                  "
+
+                >
 
                   {item.icon}
 
                 </div>
 
-                <p className="text-lg font-semibold text-gray-700 text-center">
+                <p
+
+                  className="
+
+                    text-xl
+
+                    font-bold
+
+                    text-white
+
+                  "
+
+                >
 
                   {item.name}
+
+                </p>
+
+                <p
+
+                  className="
+
+                    mt-4
+
+                    text-sm
+
+                    text-blue-100
+
+                    group-hover:translate-x-2
+
+                    transition-all
+
+                    duration-300
+
+                  "
+
+                >
+
+                  Explore →
 
                 </p>
 
               </div>
 
             )
+
           )
+
         }
 
       </div>
 
     </section>
+
   );
+
 }
