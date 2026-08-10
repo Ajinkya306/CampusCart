@@ -25,12 +25,12 @@ export default function Footer() {
           </p>
 
           <p className="text-blue-400 mt-2 text-lg font-semibold">
-            SHRIVARDHAN YADAV :
+            AJINKYA MOTE :
             <a
-              href="mailto:yadavshrivardhan4950@gmail.com"
+              href="mailto:ajinkyakm306@gmail.com"
               className="ml-2 hover:underline"
             >
-              yadavshrivardhan4950@gmail.com
+              ajinkyakm306@gmail.com
             </a>
           </p>
 
