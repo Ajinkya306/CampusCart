@@ -450,119 +450,21 @@ export default function Home() {
 
       <Navbar />
 
-      <Hero />
+      <Hero
 
+        search={search}
 
-      <section className="max-w-7xl mx-auto px-6 pt-16">
+        setSearch={setSearch}
 
-        <h2 className="text-4xl font-bold text-gray-800">
+        stats={stats}
 
-        Browse Categories
-
-        </h2>
-
-        <p className="text-gray-500 mt-3">
-
-        Find products faster by selecting a category.
-
-        </p>
-
-        </section>
-
+      />
 
       <CategorySection
-          setCategory={setCategory}
-        />
+        setCategory={setCategory}
+      />
 
-        {/* WEBSITE STATS */}
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 text-center hover:shadow-xl transition">
-
-              <h2 className="text-5xl font-black text-blue-700">
-
-                {stats.totalUsers}+
-
-              </h2>
-
-              <p className="mt-3 text-gray-600 font-semibold">
-
-                Students Connected
-
-              </p>
-
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 text-center hover:shadow-xl transition">
-
-              <h2 className="text-5xl font-black text-blue-700">
-
-                {stats.totalProducts}+
-
-              </h2>
-
-              <p className="mt-3 text-gray-600 font-semibold">
-
-                Active Listings
-
-              </p>
-
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 text-center hover:shadow-xl transition">
-
-              <h2 className="text-5xl font-black text-blue-700">
-
-                {stats.totalCities}+
-
-              </h2>
-
-              <p className="mt-3 text-gray-600 font-semibold">
-
-                Cities
-
-              </p>
-
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 text-center hover:shadow-xl transition">
-
-              <h2 className="text-5xl font-black text-blue-700">
-
-                {stats.totalColleges}+
-
-              </h2>
-
-              <p className="mt-3 text-gray-600 font-semibold">
-
-                Colleges
-
-              </p>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        <TrendingBanner />
-
-      {/* Statistics */}
-
-      {/* FilterBar */}
-
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-12">
-
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">
-
-          Find Products
-
-        </h2>
-
-      </section>
+      <TrendingBanner />
 
       <FilterBar
 
@@ -582,6 +484,141 @@ export default function Home() {
         setSort={setSort}
 
       />
+
+      <section
+
+        ref={productsSectionRef}
+
+        className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16"
+
+        >
+
+        <div className="flex items-center justify-between mb-6 sm:mb-10">
+
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 sm:mb-10">
+
+            {
+
+              search
+
+                ? `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""} for "${search}"`
+
+                : category
+
+                ? `Showing ${category} Products`
+
+                : "Recently Added"
+
+            }
+
+          </h2>
+
+          <p className="text-gray-500 text-lg">
+
+            {
+              filteredProducts.length
+            } Products
+
+          </p>
+
+        </div>
+
+        {
+          loading ? (
+
+            <div
+              className="
+              grid
+              grid-cols-1
+              sm:grid-cols-2
+              lg:grid-cols-3
+              xl:grid-cols-4
+              gap-5
+              sm:gap-7
+              "
+            >
+
+              {
+                Array.from({ length: 6 }).map(
+                  (_, index) => (
+
+                    <SkeletonCard
+                      key={index}
+                    />
+
+                  )
+                )
+              }
+
+            </div>
+
+          ) : filteredProducts.length === 0 ? (
+
+            <div className="bg-white rounded-3xl shadow-xl p-20 text-center">
+
+              <h2 className="text-3xl font-bold text-gray-700">
+
+                No Products Found
+
+              </h2>
+
+              <p className="text-gray-500 mt-4 text-lg">
+
+                Try searching with different keywords.
+
+              </p>
+
+            </div>
+
+          ) : (
+
+            <>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                {
+                  filteredProducts.map(
+                    (product) => (
+
+                      <ProductCard
+                        key={product._id}
+                        product={product}
+                      />
+
+                    )
+                  )
+                }
+
+              </div>
+
+              {
+                loadingMore && (
+
+                  <div className="flex justify-center mt-12">
+
+                    <div
+                      className="
+                      w-14
+                      h-14
+                      border-4
+                      border-blue-700
+                      border-t-transparent
+                      rounded-full
+                      animate-spin
+                      "
+                    ></div>
+
+                  </div>
+
+                )
+              }
+
+            </>
+
+          )
+        }
+
+      </section>
 
       <Footer />
 
